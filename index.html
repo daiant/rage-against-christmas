@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rage Against Christmas</title>
+</head>
+
+<body>
+  <p>Escribe aqui tu codigo</p>
+
+  <pre>
+    <code contenteditable="true" data-id="code" style="border: 1px solid red; min-width: 100%; min-height: 400px;display: block;">
+
+    </code>
+  </pre>
+  <button onclick="handleSubmitCode()">darle</button>
+</body>
+<script>
+  function handleSubmitCode() {
+    const code = document.querySelector('[data-id="code"]').textContent.trim();
+    console.log(code);
+    executeCodeOnRemote(code);
+  }
+
+  function executeCodeOnRemote(code) {
+    const headers = new Headers();
+    headers.set('Content-Type', 'application/json');
+    fetch('http://localhost:3000/execute-remote-code', { method: 'POST', body: JSON.stringify({ code }), headers })
+  }
+
+</script>
+
+</html>
