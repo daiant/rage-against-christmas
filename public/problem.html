@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="./scripts/utils.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rage Against Christmas</title>
+</head>
+
+<body x-data="{ data: {}, ready: false }" x-init="await getProblem(data); ready = true;">
+  <a href="/index.html">Volver</a>
+  <template x-if="ready">
+    <div>
+
+      <div x-data="problem = data.problem">
+        <h1 x-text="problem.title" x-init=" console.log(problem) "></h1>
+        <p x-html="problem.content" style="white-space: pre-line;"></p>
+        <p x-html="problem.input" style="white-space: pre-line;"></p>
+        <label>Codigo >></label>
+        <textarea id="code"></textarea>
+        <button @click="submitProblem()">enviar</button>
+      </div>
+      <div x-data="submissions = data.submissions">
+        <h2>Submissions</h2>
+        <p x-text="submissions.length"></p>
+        <template x-for="(submission, index) in submissions" :key="index">
+          <div>
+            <p x-text="submission.submission"></p>
+            <p x-text="submission.status"></p>
+            <p x-html="submission.output" style="white-space: pre-line;"></p>
+            <p x-text="submission.execution_time"></p>
+          </div>
+        </template>
+      </div>
+    </div>
+  </template><!-- <p x-text="dateToString(problem.active_time_window_start)"></p> -->
+</body>
+
+<script>
+  function getProblemId() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('problem');
+  }
+
+  async function getProblem(data) {
+    const id = getProblemId();
+    if (!id) alert('No problem id provided in URL');
+
+    const res = await fetch(`/problem/${id}`, { headers: headers() }).then(res => res.json());
+    const subs = await fetch(`/problem/${id}/submissions`, { headers: headers() }).then(res => res.json());
+    data.problem = res.problem;
+    data.submissions = subs.submissions
+  }
+
+  async function submitProblem() {
+    const id = getProblemId();
+    const code = document.getElementById('code').value;
+
+    const response = await fetch(`/problem/${id}/submit`, {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({ code })
+    });
+
+    const result = await response.json();
+    alert(JSON.stringify(result));
+  }
+
+</script>
+
+</html>

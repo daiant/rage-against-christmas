@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="./scripts/utils.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rage Against Christmas</title>
+</head>
+
+<body>
+  <h1>
+    Login
+  </h1>
+  <form x-data="{}">
+    <input type="text" id="username" placeholder="Username" autocomplete="username" />
+    <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
+    <button type="button" @click="login">Login</button>
+  </form>
+
+</body>
+
+<script>
+  function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, password })
+    }).then(res => res.json())
+      .then(data => {
+        if (data.accessToken) {
+          localStorage.setItem('accessToken', data.accessToken);
+          window.location.href = '/index.html';
+        } else {
+          alert('Login failed');
+        }
+      });
+  }
+
+</script>
+
+</html>

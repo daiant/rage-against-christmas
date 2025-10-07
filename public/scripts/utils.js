@@ -1,0 +1,14 @@
+const dateTimeFormat = new Intl.DateTimeFormat('es-ES', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+function dateToString(date) {
+  return dateTimeFormat.format(date * 1000);
+}
+
+const headers = () => new Headers({
+  'Content-Type': 'application/json',
+  'Authorization': window.localStorage.getItem('accessToken')
+})
