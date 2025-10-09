@@ -8,6 +8,14 @@ function dateToString(date) {
   return dateTimeFormat.format(date * 1000);
 }
 
+function getUserId() {
+  return window.localStorage.getItem('userId');
+}
+
+function getUserName() {
+  return window.localStorage.getItem('userName');
+}
+
 const headers = () => new Headers({
   'Content-Type': 'application/json',
   'Authorization': window.localStorage.getItem('accessToken')

@@ -10,7 +10,7 @@ const calculateSubmission = (input, desiredOutput, code) => {
     ${code}
     output = main(input);
     then = new Date().getTime();
-    executionTime = (then - now) + 'ms';
+    executionTime = then - now;
     `, sandbox);
   const context = {}
   script.runInNewContext(context);

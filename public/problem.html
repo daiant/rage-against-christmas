@@ -3,14 +3,14 @@
 
 <head>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script src="./scripts/utils.js"></script>
+  <script src="/scripts/utils.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rage Against Christmas</title>
 </head>
 
 <body x-data="{ data: {}, ready: false }" x-init="await getProblem(data); ready = true;">
-  <a href="/index.html">Volver</a>
+  <a href="/">Volver</a>
   <template x-if="ready">
     <div>
 
@@ -46,19 +46,21 @@
 
   async function getProblem(data) {
     const id = getProblemId();
+    const userId = getUserId();
+    if (!userId) alert('No user id found, please login first');
     if (!id) alert('No problem id provided in URL');
 
-    const res = await ajax(`/problem/${id}`).then(res => res.json());
-    const subs = await ajax(`/problem/${id}/submissions`).then(res => res.json());
+    const res = await ajax(`/api/problem/${id}`).then(res => res.json());
+    const subs = await ajax(`/api/problem/${id}/submissions/${userId}`).then(res => res.json());
     data.problem = res.problem;
-    data.submissions = subs.submissions
+    data.submissions = subs.submissions;
   }
 
   async function submitProblem() {
     const id = getProblemId();
     const code = document.getElementById('code').value;
 
-    const response = await ajax(`/problem/${id}/submit`, {
+    const response = await ajax(`/api/problem/${id}/submit`, {
       method: 'POST',
       body: JSON.stringify({ code })
     });

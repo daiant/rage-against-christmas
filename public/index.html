@@ -9,13 +9,14 @@
   <title>Rage Against Christmas</title>
 </head>
 
-<body x-data="{ problems: [] }" x-init="await setProblems(problems)">
+<body x-data="{ problems: [], username: getUserName() }" x-init="await setProblems(problems)">
+  <p x-text="username"></p>
   <template x-for="(problem, index) in problems" :key="index">
     <div>
       <h2 x-text="problem.title"></h2>
       <p x-text="problem.description"></p>
       <p x-text="dateToString(problem.active_time_window_start)"></p>
-      <a :href="`/problem.html?problem=${problem.id}`">View Problem</a>
+      <a :href="`/problem?problem=${problem.id}`">View Problem</a>
     </div>
   </template>
 
@@ -23,7 +24,7 @@
 
 <script>
   async function setProblems(problems) {
-    const data = await ajax('/problems').then(res => res.ok ? res.json() : res.status === 401 ? (window.location.href = '/login.html') : null);
+    const data = await ajax('/api/problems').then(res => res.ok ? res.json() : res.status === 401 ? (window.location.href = '/login') : null);
     problems.push(...data.problems);
   }
 
