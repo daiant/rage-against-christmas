@@ -12,3 +12,10 @@ const headers = () => new Headers({
   'Content-Type': 'application/json',
   'Authorization': window.localStorage.getItem('accessToken')
 })
+
+const ajax = (url, options) => {
+  const body = options?.body;
+  const method = options?.method;
+
+  return fetch(url, { method, body, headers: headers() });
+}

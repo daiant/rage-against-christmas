@@ -31,7 +31,7 @@ class Database {
   `);
 
     await this.db.exec(`
-    DROP TABLE submissions
+    DROP TABLE if exists submissions
     `);
     await this.db.exec(`
     CREATE TABLE IF NOT EXISTS submissions (

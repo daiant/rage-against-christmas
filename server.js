@@ -10,7 +10,7 @@ app.use(express.static('public'));
 app.use(express.json());
 
 app.use((req, res, next) => {
-  if (req.path.startsWith('/login')) { next(); return; }
+  if (req.path.startsWith('/public') || req.path.startsWith('/login')) { next(); return; }
   if (req.method === 'OPTIONS') { next(); return; }
   const auth = req.headers['authorization'];
   if (!auth || auth === 'null' || auth === 'undefined') {
@@ -66,7 +66,6 @@ app.post('/problem/:id/submit', async (req, res) => {
 app.post('/login', (req, res) => {
   const { username: alias, password } = req.body;
   db.getUser(alias, password).then(user => {
-    console.log(user);
     if (!user) {
       res.status(401).send({ error: 'Invalid credentials' });
       return;
@@ -76,5 +75,5 @@ app.post('/login', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Rage Against Port ${port}`)
 })

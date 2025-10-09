@@ -15,7 +15,7 @@
     <div>
 
       <div x-data="problem = data.problem">
-        <h1 x-text="problem.title" x-init=" console.log(problem) "></h1>
+        <h1 x-text="problem.title"></h1>
         <p x-html="problem.content" style="white-space: pre-line;"></p>
         <p x-html="problem.input" style="white-space: pre-line;"></p>
         <label>Codigo >></label>
@@ -35,7 +35,7 @@
         </template>
       </div>
     </div>
-  </template><!-- <p x-text="dateToString(problem.active_time_window_start)"></p> -->
+  </template>
 </body>
 
 <script>
@@ -48,8 +48,8 @@
     const id = getProblemId();
     if (!id) alert('No problem id provided in URL');
 
-    const res = await fetch(`/problem/${id}`, { headers: headers() }).then(res => res.json());
-    const subs = await fetch(`/problem/${id}/submissions`, { headers: headers() }).then(res => res.json());
+    const res = await ajax(`/problem/${id}`).then(res => res.json());
+    const subs = await ajax(`/problem/${id}/submissions`).then(res => res.json());
     data.problem = res.problem;
     data.submissions = subs.submissions
   }
@@ -58,9 +58,8 @@
     const id = getProblemId();
     const code = document.getElementById('code').value;
 
-    const response = await fetch(`/problem/${id}/submit`, {
+    const response = await ajax(`/problem/${id}/submit`, {
       method: 'POST',
-      headers: headers(),
       body: JSON.stringify({ code })
     });
 

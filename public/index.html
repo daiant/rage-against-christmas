@@ -23,7 +23,7 @@
 
 <script>
   async function setProblems(problems) {
-    const data = await fetch('/problems', { headers: headers() }).then(res => res.ok ? res.json() : res.status === 401 ? (window.location.href = '/login.html') : null);
+    const data = await ajax('/problems').then(res => res.ok ? res.json() : res.status === 401 ? (window.location.href = '/login.html') : null);
     problems.push(...data.problems);
   }
 
