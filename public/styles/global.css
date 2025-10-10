@@ -116,6 +116,12 @@ input:-webkit-autofill:active {
   justify-content: space-between;
   background-color: var(--background);
 
+  .login {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
   .breadcrumbs {
     display: flex;
     gap: 8px;
@@ -127,4 +133,24 @@ input:-webkit-autofill:active {
 .stack {
   display: grid;
   gap: 4px;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap-reverse;
+  }
+
+  .navbar .login {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .navbar .breadcrumbs {
+    flex-wrap: wrap;
+  }
+
+  .navbar .breadcrumbs * {
+    flex: 1;
+    white-space: nowrap;
+  }
 }

@@ -16,8 +16,10 @@
     <div class="breadcrumbs">
       <span>Rage against christmas</span>
     </div>
-    <span x-text="username"></span>
-    <button onclick="logout()">logout</button>
+    <div class="login">
+      <span x-text="username"></span>
+      <button onclick="logout()">logout</button>
+    </div>
   </div>
   <div class="stack" style="width: fit-content;">
     <template x-for="(problem, index) in problems" :key="index">

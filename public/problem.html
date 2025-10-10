@@ -19,8 +19,10 @@
       <span>/</span>
       <span x-text="data.problem?.title"></span>
     </div>
-    <span x-text="getUserName()"></span>
-    <button onclick="logout()">logout</button>
+    <div class="login">
+      <span x-text="getUserName()"></span>
+      <button onclick="logout()">logout</button>
+    </div>
   </div>
   <div id="main">
     <template x-if="ready">
