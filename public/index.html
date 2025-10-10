@@ -26,7 +26,10 @@
     <template x-for="(problem, index) in problems.sort((a, b) => a.id - b.id)" :key="problem.id">
       <a :href="`/problem?problem=${problem.id}`">
         <span x-text="problem.id + '.'"></span>
-        <span x-text="problem.title + (problem.hasAnsweredCorrectly ? ' ★' : '')"></span>
+        <span x-text="
+        problem.title + 
+        (problem.hasAnsweredCorrectly ? ' ★' : ' ☆') +
+        (problem.isFastestSubmission ? '★' : '☆')"></span>
       </a>
     </template>
   </div>
@@ -38,8 +41,9 @@
     const data = await ajax('/api/problems').then(res => res.ok ? res.json() : res.status === 401 ? (window.location.href = '/login') : null);
     data.problems.map(async problem => {
       const hasAnsweredCorrectly = await ajax(`/api/problem/${problem.id}/submissions/${getUserId()}/correct`).then(res => res.ok ? res.json() : false);
+      const isFastestSubmission = await ajax(`/api/problem/${problem.id}/submissions/${getUserId()}/fastest`).then(res => res.ok ? res.json() : false);
 
-      problems.push({ ...problem, hasAnsweredCorrectly: hasAnsweredCorrectly });
+      problems.push({ ...problem, hasAnsweredCorrectly, isFastestSubmission });
     })
   }
 

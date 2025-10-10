@@ -47,6 +47,9 @@
             <template x-if="submissions?.length > 0 && submissions.some(s => s.status === 'correct')">
               <div>
                 <p>You submitted an answer for this problem already!</p>
+                <p
+                  x-text="await ajax(`/api/problem/${problem.id}/submissions/${getUserId()}/fastest`).then(res => res.ok ? res.json() : false) ? 'You have the fastest submission yet!': ''">
+                </p>
               </div>
             </template>
             <template x-if="!submissions?.some(s => s.status === 'correct')">

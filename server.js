@@ -89,6 +89,12 @@ apiRouter.get('/problem/:id/submissions/:userId/correct', (req, res) => {
   );
 })
 
+apiRouter.get('/problem/:id/submissions/:userId/fastest', (req, res) => {
+  db.hasFastestSubmission(req.params.id, req.params.userId).then(response =>
+    res.send(response),
+  );
+})
+
 apiRouter.post('/problem/:id/submit', async (req, res) => {
   const problem = await db.getActiveProblem(req.params.id);
   const { input, answer } = await db.getProblemAnswer(req.params.id);
