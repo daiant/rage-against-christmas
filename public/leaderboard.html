@@ -19,10 +19,20 @@
   </script>
 </head>
 
-<body>
-  <a href="/">Volver</a>
+<body x-data="{ leaderboard: [] }" x-init="await getLeaderboard(leaderboard)">
+  <div class="navbar">
+    <div class="breadcrumbs">
+      <a href="/">Rage against christmas</a>
+      <span>/</span>
+      <span>Leaderboard</span>
+    </div>
+    <div class="login">
+      <span x-text="getUserName()"></span>
+      <button onclick="logout()">logout</button>
+    </div>
+  </div>
   <h1>Leaderboard</h1>
-  <div x-data="{ leaderboard: [] }" x-init="await getLeaderboard(leaderboard)">
+  <div>
     <table>
       <thead>
         <tr>

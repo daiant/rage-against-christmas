@@ -16,16 +16,17 @@
     <div class="breadcrumbs">
       <span>Rage against christmas</span>
     </div>
+    <a href="/leaderboard">Leaderboard</a>
     <div class="login">
       <span x-text="username"></span>
       <button onclick="logout()">logout</button>
     </div>
   </div>
   <div class="stack" style="width: fit-content;">
-    <template x-for="(problem, index) in problems" :key="index">
+    <template x-for="(problem, index) in problems.sort((a, b) => a.id - b.id)" :key="problem.id">
       <a :href="`/problem?problem=${problem.id}`">
         <span x-text="problem.id + '.'"></span>
-        <span x-text="problem.title"></span>
+        <span x-text="problem.title + (problem.hasAnsweredCorrectly ? ' ★' : '')"></span>
       </a>
     </template>
   </div>
@@ -35,7 +36,11 @@
 <script>
   async function setProblems(problems) {
     const data = await ajax('/api/problems').then(res => res.ok ? res.json() : res.status === 401 ? (window.location.href = '/login') : null);
-    problems.push(...data.problems);
+    data.problems.map(async problem => {
+      const hasAnsweredCorrectly = await ajax(`/api/problem/${problem.id}/submissions/${getUserId()}/correct`).then(res => res.ok ? res.json() : false);
+
+      problems.push({ ...problem, hasAnsweredCorrectly: hasAnsweredCorrectly });
+    })
   }
 
 </script>

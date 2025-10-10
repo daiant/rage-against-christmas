@@ -11,13 +11,13 @@
 </head>
 
 <body>
-  <h1>
-    Login
-  </h1>
-  <form x-data="{}">
+  <p>
+    Rage against christmas / Login
+  </p>
+  <form x-data="{}" style="display: grid; gap: 8px; place-content: center; height: 80vh;">
     <input type="text" id="username" placeholder="Username" autocomplete="username" />
     <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
-    <button type="button" @click="login">Login</button>
+    <button type="button" @click="login" class="primary" style="padding: 4px 8px;">Login</button>
   </form>
 
 </body>
