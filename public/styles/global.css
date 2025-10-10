@@ -22,8 +22,9 @@ body {
 
 html {
   background-color: var(--background);
-  padding: 8px;
+  padding-inline: 8px;
 }
+
 
 ::selection {
   background: var(--foreground);
@@ -67,6 +68,17 @@ a {
   }
 }
 
+button.primary {
+  background-color: var(--background-lighter);
+  color: var(--foreground);
+
+  &:hover,
+  &:focus {
+    background-color: var(--foreground);
+    color: var(--background);
+  }
+}
+
 input,
 textarea {
   background-color: unset;
@@ -95,11 +107,21 @@ input:-webkit-autofill:active {
 }
 
 .navbar {
+  position: sticky;
+  top: 0px;
   align-items: center;
   display: flex;
   gap: 16px;
-  padding: 8px 16px;
+  padding-block: 16px;
   justify-content: space-between;
+  background-color: var(--background);
+
+  .breadcrumbs {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-grow: 1;
+  }
 }
 
 .stack {

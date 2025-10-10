@@ -7,54 +7,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./styles/global.css">
+  <link rel="stylesheet" href="./styles/problem.css">
   <title>Rage Against Christmas</title>
-  <style type="text/css" media="screen">
-    #editor {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-    }
-  </style>
 </head>
 
 <body x-data="{ data: {}, ready: false }" x-init="await getProblem(data); ready = true; loadEditor()">
-  <a href="/">Volver</a>
-  <div style="display: grid; grid-template-columns: 1fr 1fr;height: 100%;">
-    <template x-if="ready">
-      <div>
-        <div x-data="problem = data.problem">
-          <h1 x-text=" problem.title">
-          </h1>
-          <p x-html="problem.content" style="white-space: pre-line;"></p>
-          <p x-html="problem.input" style="white-space: pre-line;"></p>
-          <label>Codigo >></label>
-        </div>
-
-        <button @click="submitProblem()">enviar</button>
-      </div>
-      <div x-data="submissions = data.submissions">
-        <h2>Submissions</h2>
-        <p x-text="submissions.length"></p>
-        <template x-for="(submission, index) in submissions" :key="index">
-          <div>
-            <p x-text="submission.submission"></p>
-            <p x-text="submission.status"></p>
-            <p x-html="submission.output" style="white-space: pre-line;"></p>
-            <p x-text="submission.execution_time"></p>
-          </div>
-        </template>
-      </div>
+  <div class="navbar">
+    <div class="breadcrumbs">
+      <a href="/">Rage against christmas</a>
+      <span>/</span>
+      <span x-text="data.problem?.title"></span>
+    </div>
+    <span x-text="getUserName()"></span>
+    <button onclick="logout()">logout</button>
   </div>
-  </template>
+  <div id="main">
+    <div id="description">
+      <template x-if="ready">
+        <div>
+          <div x-data="problem = data.problem">
+            <h1 x-text=" problem.title">
+            </h1>
+            <p x-html="problem.content" style="white-space: pre-line;"></p>
+            <p x-html="problem.input" style="white-space: pre-line;"></p>
+          </div>
 
-  <aside style="position: relative;">
+          <div x-data="submissions = data.submissions">
+            <template x-if="submissions?.length > 0 && submissions.some(s => s.status === 'correct')">
+              <div>
+                <p>You submitted an answer for this problem already!</p>
+              </div>
+            </template>
+            <template x-if="!submissions?.some(s => s.status === 'correct')">
+              <p>You still hasn't answered this problem.</p>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
 
-    <div id="editor"></div>
-  </aside>
-
-
+    <aside>
+      <div id="editor"></div>
+      <div class="code-actions">
+        <button>run code</button>
+        <button class="primary" @click="submitProblem()">submit code</button>
+      </div>
+      <div class="code-results">
+        <p>Code results</p>
+        <ul>
+          <li>
+            <span>Test Case 1</span>
+            <span class="correct">correct</span>
+          </li>
+          <li>
+            <span>Test Case 2</span>
+            <span>running</span>
+          </li>
+          <li>
+            <span>Test Case 3</span>
+            <span class="incorrect">incorrect</span>
+          </li>
+        </ul>
+        <p>Code is incorrect. Cannot submit.</p>
+      </div>
+    </aside>
 
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.43.3/ace.js" type="text/javascript"
@@ -62,7 +78,8 @@
   <script>
     function loadEditor() {
       var editor = ace.edit("editor");
-      editor.setTheme("ace/theme/monokai");
+      editor.setTheme("ace/theme/github_dark");
+      editor.setOption("showGutter", false);
       editor.session.setMode("ace/mode/javascript");
       editor.setValue(`function main(input) {
       // your code here
