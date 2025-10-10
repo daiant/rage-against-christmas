@@ -11,7 +11,7 @@
   <title>Rage Against Christmas</title>
 </head>
 
-<body x-data="{ data: {}, ready: false, testCodeResults: [] }"
+<body x-data="{ data: {}, ready: false, testCodeResults: [], submittedCodeResult: [] }"
   x-init="await getProblem(data); ready = true; loadEditor()">
   <div class="navbar">
     <div class="breadcrumbs">
@@ -23,16 +23,24 @@
     <button onclick="logout()">logout</button>
   </div>
   <div id="main">
-    <div id="description">
+    <template x-if="ready">
+      <div id="description">
+        <div x-data="problem = data.problem">
+          <h1 x-text=" roblem.title">
+          </h1>
+          <p x-html="problem.content" style="white-space: pre-line;"></p>
+        </div>
+      </div>
+    </template>
+
+    <aside>
+      <div id="editor"></div>
       <template x-if="ready">
         <div>
-          <div x-data="problem = data.problem">
-            <h1 x-text=" problem.title">
-            </h1>
-            <p x-html="problem.content" style="white-space: pre-line;"></p>
-            <p x-html="problem.input" style="white-space: pre-line;"></p>
+          <div class="code-actions">
+            <button @click="submittedCodeResult.length = 0; testCode(testCodeResults)">test code</button>
+            <button class="primary" @click="submitProblem(submittedCodeResult)">submit code</button>
           </div>
-
           <div x-data="submissions = data.submissions">
             <template x-if="submissions?.length > 0 && submissions.some(s => s.status === 'correct')">
               <div>
@@ -43,35 +51,46 @@
               <p>You still hasn't answered this problem.</p>
             </template>
           </div>
+          <template x-if="testCodeResults?.length">
+            <div class="code-results">
+              <p>Test code results</p>
+              <ul>
+                <template x-for="(result, index) in testCodeResults" :key="index">
+                  <li>
+                    <span x-text="'Test Case ' + (index + 1)"></span>
+                    <span :class="result.status" x-text="result.status"></span>
+                  </li>
+                </template>
+              </ul>
+              <template x-if="testCodeResults.some(r => r.status !== 'correct')">
+                <p>Code is incorrect. I wouldn't submit it.</p>
+              </template>
+              <template x-if="testCodeResults.every(r => r.status === 'correct')">
+                <p>Code is correct. Try to <button style="display: inline;" class="primary"
+                    @click="submitProblem(submittedCodeResult)">submit
+                    it</button>.</p>
+              </template>
+            </div>
+          </template>
+          <template x-if="submittedCodeResult.length && submittedCodeResult.at(0)">
+            <div x-data="result = submittedCodeResult.at(0)" class="code-results">
+              <p>Submission result</p>
+              <ul>
+                <li>
+                  <span>Status</span>
+                  <span :class="result.status" x-text="result.status"></span>
+                </li>
+                <li>
+                  <span>Execution time</span>
+                  <span x-text="result.execution_time + ' ms'"></span>
+                </li>
+              </ul>
+              <p x-text="result.status === 'correct' ? 'Congratulations! Code is correct' : 'Buuuuuu tonto'"></p>
+            </div>
+          </template>
         </div>
       </template>
-    </div>
 
-    <aside>
-      <div id="editor"></div>
-      <div class="code-actions">
-        <button @click="testCode(testCodeResults)">test code</button>
-        <button class="primary" @click="submitProblem()">submit code</button>
-      </div>
-      <template x-if="testCodeResults?.length">
-        <div class="code-results">
-          <p>Test code results</p>
-          <ul>
-            <template x-for="(result, index) in testCodeResults" :key="index">
-              <li>
-                <span x-text="'Test Case ' + (index + 1)"></span>
-                <span :class="result.status" x-text="result.status"></span>
-              </li>
-            </template>
-          </ul>
-          <template x-if="testCodeResults.some(r => r.status !== 'correct')">
-            <p>Code is incorrect. Cannot submit.</p>
-          </template>
-          <template x-if="testCodeResults.every(r => r.status === 'correct')">
-            <p>Code is correct. Try to submit it.</p>
-          </template>
-        </div>
-      </template>
     </aside>
 
   </div>
@@ -107,17 +126,21 @@
       data.submissions = subs.submissions;
     }
 
-    async function submitProblem() {
+    async function submitProblem(submittedCodeResult) {
+      submittedCodeResult.length = 0;
+
       const id = getProblemId();
       const code = ace.edit("editor").getValue();
 
       const response = await ajax(`/api/problem/${id}/submit`, {
         method: 'POST',
         body: JSON.stringify({ code })
-      });
+      }).then(res => res.json());
 
-      const result = await response.json();
-      alert(JSON.stringify(result));
+      submittedCodeResult.push({
+        status: response.status,
+        execution_time: response.executionTime,
+      })
     }
 
     async function testCode(testCodeResults) {

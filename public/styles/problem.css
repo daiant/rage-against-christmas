@@ -31,20 +31,25 @@ aside {
     list-style: none;
     display: grid;
     gap: 8px;
+    max-width: 405px;
 
     li {
       position: relative;
       display: flex;
+      justify-content: space-between;
       gap: 64px;
+      overflow: hidden;
+      white-space: nowrap;
 
       &::after {
-        content: '...................';
-        clip-path: rect(0px 170px 16px 115px);
+        content: '..................................................................................................................';
         position: absolute;
         z-index: -1;
+        user-select: none;
       }
 
       span {
+        width: fit-content;
         background-color: var(--background);
         border-radius: 4px;
         padding-inline: 4px;
@@ -59,5 +64,16 @@ aside {
         }
       }
     }
+  }
+}
+
+@media (max-width: 768px) {
+  #main {
+    grid-template-columns: 1fr;
+  }
+
+  aside {
+    position: static;
+    top: auto;
   }
 }

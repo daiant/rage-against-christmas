@@ -91,7 +91,7 @@ apiRouter.post('/problem/:id/submit', async (req, res) => {
   const result = calculateSubmission(input, answer, req.body.code);
   const status = String(result.output) == String(answer) ? 'correct' : 'incorrect';
   await db.submitAnswer(req.params.id, req.body.code, result, status, req.userId);
-  res.send({ problem: problem.title, submission: req.body });
+  res.send({ problemId: req.params.id, status, executionTime: result.executionTime });
 });
 
 apiRouter.post('/login', (req, res) => {
