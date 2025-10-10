@@ -1,8 +1,7 @@
 :root {
-  --background: #0F1811;
-  --background-lighter: hsl(133, 23%, 32%);
-  --foreground: #10AB09;
-  --foreground-lighter: #32C24D;
+  --background: #212034;
+  --background-lighter: #AB3131;
+  --foreground: #D9A065;
 }
 
 *,
@@ -79,12 +78,20 @@ textarea {
 
   &:focus {
     outline: 0;
-    border-color: var(--foreground-lighter);
   }
 
   &::placeholder {
     color: var(--background-lighter);
   }
+}
+
+/* Change the white to any color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--background) inset !important;
+  -webkit-text-fill-color: var(--foreground) !important;
 }
 
 .navbar {
