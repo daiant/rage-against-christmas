@@ -4,21 +4,25 @@
 <head>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="./scripts/utils.js"></script>
+  <link rel="stylesheet" href="./styles/global.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rage Against Christmas</title>
 </head>
 
 <body x-data="{ problems: [], username: getUserName() }" x-init="await setProblems(problems)">
-  <p x-text="username"></p>
-  <template x-for="(problem, index) in problems" :key="index">
-    <div>
-      <h2 x-text="problem.title"></h2>
-      <p x-text="problem.description"></p>
-      <p x-text="dateToString(problem.active_time_window_start)"></p>
-      <a :href="`/problem?problem=${problem.id}`">View Problem</a>
-    </div>
-  </template>
+  <div class="navbar">
+    <span x-text="username"></span>
+    <button onclick="logout()">logout</button>
+  </div>
+  <div class="stack" style="width: fit-content;">
+    <template x-for="(problem, index) in problems" :key="index">
+      <a :href="`/problem?problem=${problem.id}`">
+        <span x-text="problem.id + '.'"></span>
+        <span x-text="problem.title"></span>
+      </a>
+    </template>
+  </div>
 
 </body>
 

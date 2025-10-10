@@ -4,6 +4,7 @@ const dateTimeFormat = new Intl.DateTimeFormat('es-ES', {
   day: 'numeric',
 });
 
+
 function dateToString(date) {
   return dateTimeFormat.format(date * 1000);
 }
@@ -26,4 +27,9 @@ const ajax = (url, options) => {
   const method = options?.method;
 
   return fetch(url, { method, body, headers: headers() });
+}
+
+function logout() {
+  window.localStorage.clear();
+  window.location.href = '/login';
 }

@@ -11,7 +11,7 @@ app.use(express.static('public'));
 app.use(express.json());
 
 app.use((req, res, next) => {
-  if (!req.path.startsWith('/api/')) { next(); return; }
+  if (!req.path.startsWith('/api/') || req.path.startsWith('/api/login')) { next(); return; }
   if (req.method === 'OPTIONS') { next(); return; }
   const auth = req.headers['authorization'];
   if (!auth || auth === 'null' || auth === 'undefined') {

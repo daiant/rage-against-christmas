@@ -1,0 +1,101 @@
+:root {
+  --background: #0F1811;
+  --background-lighter: hsl(133, 23%, 32%);
+  --foreground: #10AB09;
+  --foreground-lighter: #32C24D;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  color: var(--foreground);
+  font-family: 'Courier New', Courier, monospace;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: var(--background);
+  padding: 8px;
+}
+
+::selection {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+h1,
+h2 {
+  text-shadow: 0 0 2px var(--foreground-lighter);
+}
+
+a {
+  color: unset;
+  display: block;
+  text-decoration: none;
+  user-select: none;
+
+}
+
+button {
+  background-color: unset;
+  color: var(--foreground);
+  border: none;
+  font-family: unset;
+  font-size: unset;
+}
+
+button,
+a {
+
+  cursor: pointer;
+
+  &:focus {
+    outline: 0;
+  }
+
+  &:hover,
+  &:focus {
+    background-color: var(--foreground);
+    color: var(--background);
+  }
+}
+
+input,
+textarea {
+  background-color: unset;
+  border: 1px solid var(--foreground);
+  color: var(--foreground);
+  font-family: unset;
+  font-size: unset;
+  padding: 4px 8px;
+
+  &:focus {
+    outline: 0;
+    border-color: var(--foreground-lighter);
+  }
+
+  &::placeholder {
+    color: var(--background-lighter);
+  }
+}
+
+.navbar {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  padding: 8px 16px;
+  justify-content: space-between;
+}
+
+.stack {
+  display: grid;
+  gap: 4px;
+}
