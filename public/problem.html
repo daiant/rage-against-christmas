@@ -11,7 +11,8 @@
   <title>Rage Against Christmas</title>
 </head>
 
-<body x-data="{ data: {}, ready: false }" x-init="await getProblem(data); ready = true; loadEditor()">
+<body x-data="{ data: {}, ready: false, testCodeResults: [] }"
+  x-init="await getProblem(data); ready = true; loadEditor()">
   <div class="navbar">
     <div class="breadcrumbs">
       <a href="/">Rage against christmas</a>
@@ -49,27 +50,28 @@
     <aside>
       <div id="editor"></div>
       <div class="code-actions">
-        <button>run code</button>
+        <button @click="testCode(testCodeResults)">test code</button>
         <button class="primary" @click="submitProblem()">submit code</button>
       </div>
-      <div class="code-results">
-        <p>Code results</p>
-        <ul>
-          <li>
-            <span>Test Case 1</span>
-            <span class="correct">correct</span>
-          </li>
-          <li>
-            <span>Test Case 2</span>
-            <span>running</span>
-          </li>
-          <li>
-            <span>Test Case 3</span>
-            <span class="incorrect">incorrect</span>
-          </li>
-        </ul>
-        <p>Code is incorrect. Cannot submit.</p>
-      </div>
+      <template x-if="testCodeResults?.length">
+        <div class="code-results">
+          <p>Test code results</p>
+          <ul>
+            <template x-for="(result, index) in testCodeResults" :key="index">
+              <li>
+                <span x-text="'Test Case ' + (index + 1)"></span>
+                <span :class="result.status" x-text="result.status"></span>
+              </li>
+            </template>
+          </ul>
+          <template x-if="testCodeResults.some(r => r.status !== 'correct')">
+            <p>Code is incorrect. Cannot submit.</p>
+          </template>
+          <template x-if="testCodeResults.every(r => r.status === 'correct')">
+            <p>Code is correct. Try to submit it.</p>
+          </template>
+        </div>
+      </template>
     </aside>
 
   </div>
@@ -116,6 +118,23 @@
 
       const result = await response.json();
       alert(JSON.stringify(result));
+    }
+
+    async function testCode(testCodeResults) {
+      testCodeResults.length = 0;
+      const code = ace.edit("editor").getValue();
+      const { testCases } = await ajax(`/api/problem/${getProblemId()}/test-cases`).then(res => res.json());
+
+      testCases.forEach(test => {
+        console.debug(`Running test case with input: ${test.input}`);
+        const response = eval(code + `\nmain(\`${test.input}\`)`);
+        console.debug(`Expected: ${test.expected_output}, Got: ${response}`);
+        setTimeout(() => {
+          testCodeResults.push({
+            status: response == test.expected_output ? 'correct' : 'incorrect'
+          })
+        }, 100);
+      })
     }
 
   </script>

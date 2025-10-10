@@ -1,7 +1,7 @@
-const { Database } = require('./db/db');
-const { calculateLeaderBoard } = require('./submissions/calculate-leaderboard');
+const { Database } = require('./lib/db/db');
+const { calculateLeaderBoard } = require('./lib/submissions/calculate-leaderboard');
 const db = new Database();
-const { calculateSubmission } = require('./submissions/calculate-submission');
+const { calculateSubmission } = require('./lib/submissions/calculate-submission');
 
 const express = require('express');
 const app = express();
@@ -65,6 +65,12 @@ apiRouter.get('/problem/:id', (req, res) => {
   );
 });
 
+apiRouter.get('/problem/:id/test-cases', (req, res) => {
+  db.getProblemTestCases(req.params.id).then(testCases =>
+    res.send({ testCases })
+  );
+});
+
 apiRouter.get('/problem/:id/submissions', (req, res) => {
   db.getSubmissionsByProblemId(req.params.id).then(submissions =>
     res.send({ submissions: submissions })
@@ -79,10 +85,10 @@ apiRouter.get('/problem/:id/submissions/:userid', (req, res) => {
 
 apiRouter.post('/problem/:id/submit', async (req, res) => {
   const problem = await db.getActiveProblem(req.params.id);
-  const { answer } = await db.getProblemAnswer(req.params.id);
+  const { input, answer } = await db.getProblemAnswer(req.params.id);
   if (!problem) res.status(404).send({ error: 'Problem not found or not active' });
 
-  const result = calculateSubmission(problem.input, problem.answer, req.body.code);
+  const result = calculateSubmission(input, answer, req.body.code);
   const status = String(result.output) == String(answer) ? 'correct' : 'incorrect';
   await db.submitAnswer(req.params.id, req.body.code, result, status, req.userId);
   res.send({ problem: problem.title, submission: req.body });
