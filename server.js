@@ -2,13 +2,18 @@ const { Database } = require('./lib/db/db');
 const { calculateLeaderBoard } = require('./lib/submissions/calculate-leaderboard');
 const db = new Database();
 const { calculateSubmission } = require('./lib/submissions/calculate-submission');
-const {create} = require('express-handlebars');
+const { create } = require('express-handlebars');
 
 const express = require('express');
 const app = express();
 const port = 3000;
 
-const hbs = create()
+const hbs = create({
+  helpers: {
+    concat(a, b) { return a + b; },
+  }
+
+})
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
@@ -37,16 +42,16 @@ app.use((req, res, next) => {
   });
 })
 
-app.get('/', (req, res) => {
-    res.render('index');
+app.get('/', async (req, res) => {
+  res.render('index', {
+    problems: await db.getActiveProblems(),
+  });
 });
 
-app.get('/problems', (req, res) => {
-    res.render('index');
-});
-
-app.get('/problem', (req, res) => {
-  res.render(`problem`);
+app.get('/problems', async (req, res) => {
+  res.render('index', {
+    problems: await db.getActiveProblems(),
+  });
 });
 
 app.get('/leaderboard', (req, res) => {
@@ -54,10 +59,21 @@ app.get('/leaderboard', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  // res.sendFile(`public/login.html`, { root: '.' });
-    res.render('login', {
-        layout: false
-    });
+  res.render('login', {
+    layout: false
+  });
+});
+
+app.get('/problems/:id', (req, res) => {
+  db.getActiveProblem(req.params.id).then(problem =>
+    res.render('problem', { problem: problem })
+  );
+});
+
+app.get('/problem/:id', (req, res) => {
+  db.getActiveProblem(req.params.id).then(problem =>
+    res.render('problem', { problem: problem })
+  );
 });
 
 const apiRouter = express.Router();
@@ -66,13 +82,14 @@ apiRouter.get('/problems', (req, res) => {
   db.getActiveProblems().then(problems =>
     res.send({ problems: problems })
   );
-})
-
-apiRouter.get('/problem/:id', (req, res) => {
-  db.getActiveProblem(req.params.id).then(problem =>
-    res.send({ problem: problem })
-  );
 });
+
+
+// apiRouter.get('/problem/:id', (req, res) => {
+//   db.getActiveProblem(req.params.id).then(problem =>
+//     res.send({ problem: problem })
+//   );
+// });
 
 apiRouter.get('/problem/:id/test-cases', (req, res) => {
   db.getProblemTestCases(req.params.id).then(testCases =>

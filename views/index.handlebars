@@ -1,28 +1,38 @@
-<div x-data="{ problems: [] }" x-init="await setProblems(problems)">
-
-  <div class="stack" style="width: fit-content;">
-    <template x-for="(problem, index) in problems.sort((a, b) => a.id - b.id)" :key="problem.id">
-      <a :href="`/problem?problem=${problem.id}`">
-        <span x-text="problem.id + '.'"></span>
-        <span x-text="
-        problem.title + 
-        (problem.hasAnsweredCorrectly ? ' ★' : ' ☆') +
-        (problem.isFastestSubmission ? '★' : '☆')"></span>
-      </a>
-    </template>
-  </div>
-
-</div>
-
 <script>
-  async function setProblems(problems) {
-    const data = await ajax('/api/problems').then(res => res.ok ? res.json() : res.status === 401 ? (window.location.href = '/login') : null);
-    data.problems.map(async problem => {
-      const hasAnsweredCorrectly = await ajax(`/api/problem/${problem.id}/submissions/${getUserId()}/correct`).then(res => res.ok ? res.json() : false);
-      const isFastestSubmission = await ajax(`/api/problem/${problem.id}/submissions/${getUserId()}/fastest`).then(res => res.ok ? res.json() : false);
-
-      problems.push({ ...problem, hasAnsweredCorrectly, isFastestSubmission });
-    })
+  function hasAnsweredCorrectly(problemId, userId) {
+    return ajax(`/api/problem/{{this.id}}/submissions/${getUserId()}/correct`).then(res => res.ok ? res.json() : false).then(d => d ? '★' : '☆');
   }
 
+  function isFastestSubmission(problemId, userId) {
+    return ajax(`/api/problem/${problemId}/submissions/fastest`).then(res => res.ok ? res.json() : null).then(data => {
+      return data && data.userId === userId;
+    });
+  }
 </script>
+
+<div>
+  <div class="stack" style="width: fit-content;">
+      {{#each problems}}
+        <a href="{{concat '/problems/' this.id}}" 
+        x-data="{ isFastestSubmission: false, hasAnsweredCorrectly: false }"
+        x-init="
+        isFastestSubmission = await ajax(`/api/problem/{{this.id}}/submissions/fastest`)
+        .then(res => res.ok ? res.json() : null)
+        .then(data => { return data && data.userId === getUserId(); }); 
+
+        hasAnsweredCorrectly = 
+        ajax(`/api/problem/{{this.id}}/submissions/${getUserId()}/correct`)
+        .then(res => res.ok ? res.json() : false)"
+        >
+          <span>
+            {{concat this.id '.'}}
+          </span>
+          <span>
+            <span>{{this.title}}</span>
+            <span x-text="hasAnsweredCorrectly ? '★' : '☆'"></span>
+            <span x-text="isFastestSubmission  ? '★' : '☆'"></span>
+          </span>
+        </a>
+      {{/each}}
+  </div>
+</div>
