@@ -8,6 +8,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./styles/global.css">
   <title>Rage Against Christmas</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            th, td {
+                border: 1px solid;
+                padding: 4px 12px;
+            }
+        }
+    </style>
 
   <script>
     async function getLeaderboard(leaderboard) {
@@ -31,12 +40,11 @@
       <button onclick="logout()">logout</button>
     </div>
   </div>
-  <h1>Leaderboard</h1>
   <div>
     <table>
       <thead>
         <tr>
-          <th>Rank</th>
+          <th>#</th>
           <th>Username</th>
           <th>Submissions</th>
           <th>Score</th>

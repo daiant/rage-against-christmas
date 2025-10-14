@@ -28,7 +28,6 @@ app.use((req, res, next) => {
     req.userId = user.id;
     next();
   });
-
 })
 
 app.get('/', (req, res) => {
