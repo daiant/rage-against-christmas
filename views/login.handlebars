@@ -2,16 +2,16 @@
 <html lang="en">
 
 <head>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script src="./scripts/utils.js"></script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./styles/global.css">
-  <title>Rage Against Christmas</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="../scripts/utils.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/global.css">
+    <title>Rage Against Christmas</title>
 </head>
 
 <body>
-  <p>
+<p>
     Rage against christmas / Login
   </p>
   <form x-data="{}" style="display: grid; gap: 8px; place-content: center; height: 80vh;">
@@ -19,8 +19,6 @@
     <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
     <button type="button" @click="login" class="primary" style="padding: 4px 8px;">Login</button>
   </form>
-
-</body>
 
 <script>
   function login() {
@@ -44,5 +42,6 @@
   }
 
 </script>
+</body>
 
 </html>

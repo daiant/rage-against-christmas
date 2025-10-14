@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="../scripts/utils.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/global.css">
+    <title>Rage Against Christmas</title>
+</head>
+
+<body>
+ <div class="navbar" x-data="{}">
+    <div class="breadcrumbs">
+        <span>Rage against christmas</span>
+    </div>
+    <a href="/leaderboard">Leaderboard</a>
+    <div class="login">
+        <span x-text="getUserName()"></span>
+        <button onclick="logout()">logout</button>
+    </div>
+ </div>
+ {{{ body }}}
+</body>
+
+</html>

@@ -1,29 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+<link rel="stylesheet" href="/styles/problem.css">
 
-<head>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script src="/scripts/utils.js"></script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./styles/global.css">
-  <link rel="stylesheet" href="./styles/problem.css">
-  <title>Rage Against Christmas</title>
-</head>
-
-<body x-data="{ data: {}, ready: false, testCodeResults: [], submittedCodeResult: [] }"
+<div x-data="{ data: {}, ready: false, testCodeResults: [], submittedCodeResult: [] }"
   x-init="await getProblem(data); ready = true; loadEditor()">
-  <div class="navbar">
-    <div class="breadcrumbs">
-      <a href="/">Rage against christmas</a>
-      <span>/</span>
-      <span x-text="data.problem?.title"></span>
-    </div>
-    <div class="login">
-      <span x-text="getUserName()"></span>
-      <button onclick="logout()">logout</button>
-    </div>
-  </div>
+
   <div id="main">
     <template x-if="ready">
       <div id="description">
@@ -164,6 +143,4 @@
     }
 
   </script>
-</body>
-
-</html>
+</div>

@@ -1,27 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+<div x-data="{ problems: [] }" x-init="await setProblems(problems)">
 
-<head>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-  <script src="./scripts/utils.js"></script>
-  <link rel="stylesheet" href="./styles/global.css">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rage Against Christmas</title>
-</head>
-
-<body x-data="{ problems: [], username: getUserName() }" x-init="await setProblems(problems)">
-  <div class="navbar">
-    <div class="breadcrumbs">
-      <span>Rage against christmas</span>
-    </div>
-    <a href="/leaderboard">Leaderboard</a>
-    <div class="login">
-      <span x-text="username"></span>
-      <button onclick="logout()">logout</button>
-    </div>
-  </div>
   <div class="stack" style="width: fit-content;">
     <template x-for="(problem, index) in problems.sort((a, b) => a.id - b.id)" :key="problem.id">
       <a :href="`/problem?problem=${problem.id}`">
@@ -34,7 +12,7 @@
     </template>
   </div>
 
-</body>
+</div>
 
 <script>
   async function setProblems(problems) {
@@ -48,5 +26,3 @@
   }
 
 </script>
-
-</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    table {
+        border-collapse: collapse;
+        th, td {
+            border: 1px solid;
+            padding: 4px 12px;
+        }
+    }
+</style>
+
+<script>
+    async function getLeaderboard(leaderboard) {
+        const data = await ajax('/api/leaderboard')
+                .then(res => res.json())
+                .catch(() => ({ leaderboard: [] }));
+        leaderboard.push(...data.leaderboard);
+    }
+</script>
+<div x-data="{ leaderboard: [] }" x-init="await getLeaderboard(leaderboard)">
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Username</th>
+          <th>Submissions</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <template x-for="(entry, index) in leaderboard" :key="index">
+        <tr>
+          <td x-text="index + 1"></td>
+          <td x-text="entry.username"></td>
+          <td x-text="Object.values(entry.submissions).flat().length"></td>
+          <td x-text="entry.score"></td>
+        </tr>
+    </table>
+
+</div>

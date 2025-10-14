@@ -2,10 +2,17 @@ const { Database } = require('./lib/db/db');
 const { calculateLeaderBoard } = require('./lib/submissions/calculate-leaderboard');
 const db = new Database();
 const { calculateSubmission } = require('./lib/submissions/calculate-submission');
+const {create} = require('express-handlebars');
 
 const express = require('express');
 const app = express();
 const port = 3000;
+
+const hbs = create()
+
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
+app.set('views', './views');
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -31,23 +38,26 @@ app.use((req, res, next) => {
 })
 
 app.get('/', (req, res) => {
-  res.sendFile('public/index.html');
+    res.render('index');
 });
 
 app.get('/problems', (req, res) => {
-  res.sendFile('public/index.html', { root: '.' });
+    res.render('index');
 });
 
 app.get('/problem', (req, res) => {
-  res.sendFile(`public/problem.html`, { root: '.' });
+  res.render(`problem`);
 });
 
 app.get('/leaderboard', (req, res) => {
-  res.sendFile(`public/leaderboard.html`, { root: '.' });
+  res.render(`leaderboard`);
 });
 
 app.get('/login', (req, res) => {
-  res.sendFile(`public/login.html`, { root: '.' });
+  // res.sendFile(`public/login.html`, { root: '.' });
+    res.render('login', {
+        layout: false
+    });
 });
 
 const apiRouter = express.Router();
