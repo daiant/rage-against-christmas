@@ -16,13 +16,12 @@
         <a href="{{concat '/problems/' this.id}}" 
         x-data="{ isFastestSubmission: false, hasAnsweredCorrectly: false }"
         x-init="
-        isFastestSubmission = await ajax(`/api/problem/{{this.id}}/submissions/fastest`)
-        .then(res => res.ok ? res.json() : null)
+        ajax(`/api/problem/{{this.id}}/submissions/${getUserId()}/fastest`)
+        .then(res => res.ok ? res.json() : null).then(d => isFastestSubmission = Boolean(d))
         .then(data => { return data && data.userId === getUserId(); }); 
-
-        hasAnsweredCorrectly = 
+       
         ajax(`/api/problem/{{this.id}}/submissions/${getUserId()}/correct`)
-        .then(res => res.ok ? res.json() : false)"
+        .then(res => res.ok ? res.json() : false).then(d => hasAnsweredCorrectly = Boolean(d));"
         >
           <span>
             {{concat this.id '.'}}

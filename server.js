@@ -11,8 +11,8 @@ const port = 3000;
 const hbs = create({
   helpers: {
     concat(a, b) { return a + b; },
+    sum(a, b) { return a + b; },
   }
-
 })
 
 app.engine('handlebars', hbs.engine);
@@ -55,7 +55,13 @@ app.get('/problems', async (req, res) => {
 });
 
 app.get('/leaderboard', (req, res) => {
-  res.render(`leaderboard`);
+  db.getAllSubmissions().then(submissions => {
+    res.render('leaderboard', {
+      leaderboard:
+        calculateLeaderBoard(submissions)
+    })
+  }
+  );
 });
 
 app.get('/login', (req, res) => {
@@ -85,12 +91,6 @@ apiRouter.get('/problems', (req, res) => {
 });
 
 
-// apiRouter.get('/problem/:id', (req, res) => {
-//   db.getActiveProblem(req.params.id).then(problem =>
-//     res.send({ problem: problem })
-//   );
-// });
-
 apiRouter.get('/problem/:id/test-cases', (req, res) => {
   db.getProblemTestCases(req.params.id).then(testCases =>
     res.send({ testCases })
@@ -104,8 +104,7 @@ apiRouter.get('/problem/:id/submissions', (req, res) => {
 });
 
 apiRouter.get('/problem/:id/submissions/:userid', (req, res) => {
-  db.getSubmissionsByUser(req.params.id, req.params.userid).then(submissions =>
-    res.send({ submissions: submissions }),
+  db.getSubmissionsByUser(req.params.id, req.params.userid).then(submissions => { console.log(submissions); return res.send({ submissions: submissions }) }
   );
 });
 
@@ -113,13 +112,13 @@ apiRouter.get('/problem/:id/submissions/:userId/correct', (req, res) => {
   db.hasCorrectSubmission(req.params.id, req.params.userId).then(response =>
     res.send(response),
   );
-})
+});
 
 apiRouter.get('/problem/:id/submissions/:userId/fastest', (req, res) => {
   db.hasFastestSubmission(req.params.id, req.params.userId).then(response =>
     res.send(response),
   );
-})
+});
 
 apiRouter.post('/problem/:id/submit', async (req, res) => {
   const problem = await db.getActiveProblem(req.params.id);
@@ -143,15 +142,15 @@ apiRouter.post('/login', (req, res) => {
   })
 });
 
-apiRouter.get('/leaderboard', (req, res) => {
-  db.getAllSubmissions().then(submissions => {
-    res.send({
-      leaderboard:
-        calculateLeaderBoard(submissions)
-    })
-  }
-  );
-});
+// apiRouter.get('/leaderboard', (req, res) => {
+//   db.getAllSubmissions().then(submissions => {
+//     res.send({
+//       leaderboard:
+//         calculateLeaderBoard(submissions)
+//     })
+//   }
+//   );
+// });
 
 app.use('/api', apiRouter);
 

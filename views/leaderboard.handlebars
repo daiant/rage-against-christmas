@@ -9,16 +9,7 @@
         }
     }
 </style>
-
-<script>
-    async function getLeaderboard(leaderboard) {
-        const data = await ajax('/api/leaderboard')
-                .then(res => res.json())
-                .catch(() => ({ leaderboard: [] }));
-        leaderboard.push(...data.leaderboard);
-    }
-</script>
-<div x-data="{ leaderboard: [] }" x-init="await getLeaderboard(leaderboard)">
+<div>
 
     <table>
       <thead>
@@ -29,13 +20,14 @@
           <th>Score</th>
         </tr>
       </thead>
-      <template x-for="(entry, index) in leaderboard" :key="index">
-        <tr>
-          <td x-text="index + 1"></td>
-          <td x-text="entry.username"></td>
-          <td x-text="Object.values(entry.submissions).flat().length"></td>
-          <td x-text="entry.score"></td>
-        </tr>
+        {{#each leaderboard}}
+          <tr>
+            <td>{{sum @index 1}}</td>
+            <td>{{this.username}}</td>
+            <td>{{this.submissionsLength}}</td>
+            <td>{{this.score}}</td>
+          </tr>
+        {{/each}}
     </table>
 
 </div>
