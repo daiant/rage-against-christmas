@@ -1,141 +1,164 @@
 <link rel="stylesheet" href="/styles/problem.css">
 
 <div x-data="{ data: {}, ready: false, testCodeResults: [], submittedCodeResult: [] }"
-  x-init="await getProblem(data); ready = true; loadEditor()">
+     x-init="await getProblem(data); ready = true; loadEditor()">
 
-  <div id="main">
-    <template x-if="ready">
-      <div id="description">
-        {{{problem.content}}}
-      </div>
-    </template>
-
-    <aside>
-      <div id="editor"></div>
-      <template x-if="ready">
-        <div>
-          <div class="code-actions">
-            <button @click="submittedCodeResult.length = 0; testCode(testCodeResults)">test code</button>
-            <button class="primary" @click="submitProblem(submittedCodeResult)">submit code</button>
-          </div>
-          <div x-data="submissions = data.submissions">
-            <template x-if="submissions?.length > 0 && submissions.some(s => s.status === 'correct')">
-              <div>
-                <p>You submitted an answer for this problem already!</p>
-                <p
-                  x-text="await ajax(`/api/problem/{{problem.id}}/submissions/${getUserId()}/fastest`).then(res => res.ok ? res.json() : false) ? 'You have the fastest submission yet!': ''">
-                </p>
-              </div>
-            </template>
-            <template x-if="!submissions?.some(s => s.status === 'correct')">
-              <p>You still hasn't answered this problem.</p>
-            </template>
-          </div>
-          <template x-if="testCodeResults?.length">
-            <div class="code-results">
-              <p>Test code results</p>
-              <ul>
-                <template x-for="(result, index) in testCodeResults" :key="index">
-                  <li>
-                    <span x-text="'Test Case ' + (index + 1)"></span>
-                    <span :class="result.status" x-text="result.status"></span>
-                  </li>
-                </template>
-              </ul>
-              <template x-if="testCodeResults.some(r => r.status !== 'correct')">
-                <p>Code is incorrect. I wouldn't submit it.</p>
-              </template>
-              <template x-if="testCodeResults.every(r => r.status === 'correct')">
-                <p>Code is correct. Try to <button style="display: inline;" class="primary"
-                    @click="submitProblem(submittedCodeResult)">submit
-                    it</button>.</p>
-              </template>
-            </div>
-          </template>
-          <template x-if="submittedCodeResult.length && submittedCodeResult.at(0)">
-            <div x-data="result = submittedCodeResult.at(0)" class="code-results">
-              <p>Submission result</p>
-              <ul>
-                <li>
-                  <span>Status</span>
-                  <span :class="result.status" x-text="result.status"></span>
-                </li>
-                <li>
-                  <span>Execution time</span>
-                  <span x-text="result.execution_time + ' ms'"></span>
-                </li>
-              </ul>
-              <p x-text="result.status === 'correct' ? 'Congratulations! Code is correct' : 'Buuuuuu tonto'"></p>
-            </div>
-          </template>
+    <div id="main">
+        <div id="description">
+            {{{problem.content}}}
         </div>
-      </template>
 
-    </aside>
+        <aside>
+            <div id="editor"></div>
+            <div>
+                <div class="code-actions">
+                    <button @click="submittedCodeResult.length = 0; testCode(testCodeResults)">test code</button>
+                    <button class="primary" @click="submitProblem(submittedCodeResult)">submit code</button>
+                </div>
+                <template x-if="ready">
+                    <div x-data="submissions = data.submissions">
+                        <template x-if="submissions?.length > 0 && submissions.some(s => s.status === 'correct')">
+                            <div>
+                                <p>You submitted an answer for this problem already!</p>
+                                <p
+                                        x-text="await ajax(`/api/problem/{{problem.id}}/submissions/${getUserId()}/fastest`).then(res => res.ok ? res.json() : false) ? 'You have the fastest submission yet!': ''">
+                                </p>
+                            </div>
+                        </template>
+                        <template x-if="!submissions?.some(s => s.status === 'correct')">
+                            <p>You still hasn't answered this problem.</p>
+                        </template>
+                    </div>
+                </template>
+                <template x-if="testCodeResults?.length">
+                    <div class="code-results">
+                        <p>Test code results</p>
+                        <ul>
+                            <template x-for="(result, index) in testCodeResults" :key="index">
+                                <div x-data="{open: false}">
+                                    <li>
+                                        <span x-text="'Test Case ' + (index + 1)" @click="open = true" @click.outside="open = false"></span>
+                                        <span :class="result.status" x-text="result.status"></span>
+                                    </li>
+                                    <template x-if="open">
+                                        <table style="margin-block: 8px">
+                                            <tr>
+                                                <td style="padding-inline-end: 8px">Input</td>
+                                                <td x-text="result.input"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-inline-end: 8px">Output</td>
+                                                <td x-text="result.desiredOutput"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-inline-end: 8px">Received</td>
+                                                <td x-text="result.output"></td>
+                                            </tr>
+                                        </table>
+                                    </template>
+                                </div>
+                            </template>
+                        </ul>
+                        <template x-if="testCodeResults.some(r => r.status !== 'correct')">
+                            <p>Code is incorrect. I wouldn't submit it.</p>
+                        </template>
+                        <template x-if="testCodeResults.every(r => r.status === 'correct')">
+                            <p>Code is correct. Try to
+                                <button style="display: inline;" class="primary"
+                                        @click="submitProblem(submittedCodeResult)">submit
+                                    it
+                                </button>
+                                .
+                            </p>
+                        </template>
+                    </div>
+                </template>
+                <template x-if="submittedCodeResult.length && submittedCodeResult.at(0)">
+                    <div x-data="result = submittedCodeResult.at(0)" class="code-results">
+                        <p>Submission result</p>
+                        <ul>
+                            <li>
+                                <span>Status</span>
+                                <span :class="result.status" x-text="result.status"></span>
+                            </li>
+                            <li>
+                                <span>Execution time</span>
+                                <span x-text="result.execution_time + ' ms'"></span>
+                            </li>
+                        </ul>
+                        <p x-text="result.status === 'correct' ? 'Congratulations! Code is correct' : 'Buuuuuu tonto'"></p>
+                    </div>
+                </template>
+            </div>
 
-  </div>
-  <script src="https://www.unpkg.com/ace-builds@latest/src-noconflict/ace.js"></script>
-  <script src="https://www.unpkg.com/ace-builds@latest/src-noconflict/ext-language_tools.js"></script>
-  <script src="https://www.unpkg.com/ace-linters@latest/build/ace-linters.js"></script>
-  <script>
-    function loadEditor() {
-      ace.require("ace/ext/language_tools"); //To allow autocompletion
-      var editor = ace.edit("editor", {
-        enableBasicAutocompletion: true,
-        enableLiveAutocompletion: true,
-        mode: 'ace/mode/javascript'
-      });
-      editor.setTheme("ace/theme/github_dark");
-      editor.setOption("showGutter", false);
-      editor.setValue(`function main(input) {
+        </aside>
+
+    </div>
+    <script src="https://www.unpkg.com/ace-builds@latest/src-noconflict/ace.js"></script>
+    <script src="https://www.unpkg.com/ace-builds@latest/src-noconflict/ext-language_tools.js"></script>
+    <script src="https://www.unpkg.com/ace-linters@latest/build/ace-linters.js"></script>
+    <script>
+        function loadEditor() {
+            ace.require("ace/ext/language_tools"); //To allow autocompletion
+            var editor = ace.edit("editor", {
+                enableBasicAutocompletion: true,
+                enableLiveAutocompletion: true,
+                mode: 'ace/mode/javascript'
+            });
+            editor.setTheme("ace/theme/github_dark");
+            editor.setOption("showGutter", false);
+            editor.setValue(`function main(input) {
       // your code here
 }
 `)
-      editor.clearSelection();
-      var provider = LanguageProvider.fromCdn("https://www.unpkg.com/ace-linters@latest/build/");
-      provider.registerEditor(editor);
-    }
+            editor.clearSelection();
+            var provider = LanguageProvider.fromCdn("https://www.unpkg.com/ace-linters@latest/build/");
+            provider.registerEditor(editor);
+        }
 
-    async function getProblem(data) {
-      const userId = getUserId();
-      if (!userId) alert('No user id found, please login first');
+        async function getProblem(data) {
+            const userId = getUserId();
+            if (!userId) alert('No user id found, please login first');
 
-      const subs = await ajax(`/api/problem/{{problem.id}}/submissions/${userId}`).then(res => res.json());
-      data.submissions = subs.submissions;
-    }
+            const subs = await ajax(`/api/problem/{{problem.id}}/submissions/${userId}`).then(res => res.json());
+            data.submissions = subs.submissions;
+        }
 
-    async function submitProblem(submittedCodeResult) {
-      submittedCodeResult.length = 0;
+        async function submitProblem(submittedCodeResult) {
+            submittedCodeResult.length = 0;
 
-      const code = ace.edit("editor").getValue();
+            const code = ace.edit("editor").getValue();
 
-      const response = await ajax(`/api/problem/{{problem.id}}/submit`, {
-        method: 'POST',
-        body: JSON.stringify({ code })
-      }).then(res => res.json());
+            const response = await ajax(`/api/problem/{{problem.id}}/submit`, {
+                method: 'POST',
+                body: JSON.stringify({code})
+            }).then(res => res.json());
 
-      submittedCodeResult.push({
-        status: response.status,
-        execution_time: response.executionTime,
-      })
-    }
+            submittedCodeResult.push({
+                status: response.status,
+                execution_time: response.executionTime,
+            })
+        }
 
-    async function testCode(testCodeResults) {
-      testCodeResults.length = 0;
-      const code = ace.edit("editor").getValue();
-      const { testCases } = await ajax('/api/problem/{{problem.id}}/test-cases').then(res => res.json());
+        async function testCode(testCodeResults) {
+            testCodeResults.length = 0;
+            const code = ace.edit("editor").getValue();
+            const {testCases} = await ajax('/api/problem/{{problem.id}}/test-cases').then(res => res.json());
 
-      testCases.forEach(test => {
-        console.debug(`Running test case with input: ${test.input}`);
-        const response = eval(code + `\nmain(\`${test.input}\`)`);
-        console.debug(`Expected: ${test.expected_output}, Got: ${response}`);
-        setTimeout(() => {
-          testCodeResults.push({
-            status: response == test.expected_output ? 'correct' : 'incorrect'
-          })
-        }, 100);
-      })
-    }
+            testCases.forEach(test => {
+                console.debug(`Running test case with input: ${test.input}`);
+                const response = eval(code + `  main(\`${test.input}\`)`);
+                console.debug(`Expected: ${test.expected_output}, Got: ${response}`);
+                setTimeout(() => {
+                    testCodeResults.push({
+                        status: response == test.expected_output ? 'correct' : 'incorrect',
+                        input: test.input,
+                        desiredOutput: test.expected_output,
+                        output: `${response}`,
+                    })
+                }, 100);
+            })
+        }
 
-  </script>
+    </script>
 </div>
