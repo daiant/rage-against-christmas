@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/styles/problem.css">
 
-<div x-data="{ data: {}, ready: false, testCodeResults: [], submittedCodeResult: [] }"
+<div x-data="{ data: {}, ready: false, testCodeResults: [], submittedCodeResult: [], submittingCode: false }"
      x-init="await getProblem(data); ready = true; loadEditor()">
 
     <div id="main">
@@ -13,7 +13,7 @@
             <div>
                 <div class="code-actions">
                     <button @click="submittedCodeResult.length = 0; testCode(testCodeResults)">test code</button>
-                    <button class="primary" @click="submitProblem(submittedCodeResult)">submit code</button>
+                    <button class="primary" @click="submittingCode = true; submitProblem(submittedCodeResult).then(() => submittingCode = false)">submit code</button>
                 </div>
                 <template x-if="ready">
                     <div x-data="submissions = data.submissions">
@@ -73,6 +73,9 @@
                         </template>
                     </div>
                 </template>
+                <template x-if="submittingCode">
+                    <p>Submission in progress... Wait a minutito po favo</p>
+                </template>
                 <template x-if="submittedCodeResult.length && submittedCodeResult.at(0)">
                     <div x-data="result = submittedCodeResult.at(0)" class="code-results">
                         <p>Submission result</p>
@@ -107,10 +110,7 @@
             });
             editor.setTheme("ace/theme/github_dark");
             editor.setOption("showGutter", false);
-            editor.setValue(`function main(input) {
-      // your code here
-}
-`)
+            editor.setValue(`{{{problem.initial_code}}}`)
             editor.clearSelection();
             var provider = LanguageProvider.fromCdn("https://www.unpkg.com/ace-linters@latest/build/");
             provider.registerEditor(editor);
@@ -146,7 +146,7 @@
             const {testCases} = await ajax('/api/problem/{{problem.id}}/test-cases').then(res => res.json());
 
             testCases.forEach(test => {
-                console.debug(`Running test case with input: ${test.input}`);
+                console.debug(`Running test case with input: ${test.input.trim()}`);
                 const response = eval(code + `  main(\`${test.input}\`)`);
                 console.debug(`Expected: ${test.expected_output}, Got: ${response}`);
                 setTimeout(() => {
