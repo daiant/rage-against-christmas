@@ -104,7 +104,7 @@ apiRouter.get('/problem/:id/submissions', (req, res) => {
 });
 
 apiRouter.get('/problem/:id/submissions/:userid', (req, res) => {
-  db.getSubmissionsByUser(req.params.id, req.params.userid).then(submissions => { console.log(submissions); return res.send({ submissions: submissions }) }
+  db.getSubmissionsByUser(req.params.id, req.params.userid).then(submissions => res.send({ submissions: submissions })
   );
 });
 
