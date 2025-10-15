@@ -8,37 +8,182 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/global.css">
     <title>Rage Against Christmas</title>
+    <style>
+        body, .boot-sequence {
+            position: relative;
+            --crt-red: rgb(218, 49, 49);
+            --crt-green: rgb(112, 159, 115);
+            --crt-blue: rgb(40, 129, 206);
+
+            &::before {
+                background: repeating-linear-gradient(var(--crt-red) 0px, var(--crt-green) 2px, var(--crt-blue) 4px)
+            }
+
+            &::after {
+                background: repeating-linear-gradient(90deg, var(--crt-red) 1px, var(--crt-green) 2px, var(--crt-blue) 3px);
+            }
+
+            &::before, &::after {
+                content: "";
+                transform: translateZ(0);
+                pointer-events: none;
+                mix-blend-mode: overlay;
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                left: 0;
+                top: 0;
+                z-index: 1;
+
+            }
+        }
+        form input {
+            border: none;
+            padding: 0;
+        }
+        .boot-sequence {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background-color: var(--background);
+            padding: 8px;
+
+            span {
+                font-size: 14px;
+                font-family: monospace;
+                display: block;
+                opacity: 0;
+                animation-name: blink-enter;
+                animation-duration: 0s;
+                animation-delay: calc(50ms * var(--delay, 0));
+                animation-fill-mode: forwards;
+            }
+            span:last-child {
+                font-weight: bold;
+                animation-iteration-count: 3;
+                animation-duration: 300ms;
+            }
+        }
+
+        @keyframes blink-enter {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        form input {
+            border-width: 2px;
+            padding-block: 8px;
+        }
+    </style>
 </head>
 
-<body>
-<p>
-    Rage against christmas / Login
-  </p>
-  <form x-data="{}" style="display: grid; gap: 8px; place-content: center; height: 80vh;">
-    <input type="text" id="username" placeholder="Username" autocomplete="username" />
-    <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
-    <button type="button" @click="login" class="primary" style="padding: 4px 8px;">Login</button>
+<body x-data="{logs: [], username: '', password: '', setUsername(event) {this.username = event.target.value;  setTimeout(() => {document.querySelector('#password').focus();}, 0) }}">
+
+<div class="boot-sequence" x-show="logs.length > 0">
+    <template x-for="(log, index) of logs">
+        <span x-text="log" :style="{'--delay': index}" ></span>
+    </template>
+</div>
+
+
+  <form>
+      <div style="display: flex; align-items: center;gap:8px">
+          <p>Rage Against Christmas</p>
+          <p>v1.3</p>
+      </div>
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" autocomplete="username" autofocus required @blur="setUsername($event)" @keydown.enter="setUsername($event)"/>
+        </div>
+        <div x-show="username">
+            <label for="password">Password:</label>
+            <input type="password" id="password" autocomplete="current-password" @keydown.enter="login" x-model="password"/>
+        </div>
+        <button type="button" @click="login" style="padding: 4px 8px;" x-show="password">
+            <span>Login</span>
+        </button>
   </form>
 
 <script>
   function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+        ajax('/api/login', {
+            method: 'POST',
+            body: JSON.stringify({ username, password })
+        }).then(res => res.json())
+                .then(data => {
+                    if (data.accessToken) {
+                        localStorage.setItem('accessToken', data.accessToken);
+                        localStorage.setItem('userId', data.userId);
+                        localStorage.setItem('userName', data.userName);
+                        this.logs = bootSequence(data.userName);
+                    } else {
+                        console.log('failed');
+                    }
+                });
+  }
 
-    ajax('/api/login', {
-      method: 'POST',
-      body: JSON.stringify({ username, password })
-    }).then(res => res.json())
-      .then(data => {
-        if (data.accessToken) {
-          localStorage.setItem('accessToken', data.accessToken);
-          localStorage.setItem('userId', data.userId);
-          localStorage.setItem('userName', data.userName);
-          window.location.href = '/';
-        } else {
-          alert('Login failed');
-        }
-      });
+  function bootSequence(name = 'pepe') {
+      const logs = [
+          'Starting HTTP 2.0 Protocol Handshake',
+          'Sent SYN',
+          'Received ACK',
+          'Requested website access',
+          `SUCCESS: Authorized access detected. Welcome, ${name}`,
+          '[SYSTEM] Redirecting to login page',
+          'Receiving stream 0%',
+          'Receiving stream 3%',
+          'Receiving stream 6%',
+          'Receiving stream 7%',
+          'Receiving stream 9%',
+          'Receiving stream 14%',
+          'Receiving stream 21%',
+          'Receiving stream 34%',
+          'Receiving stream 45%',
+          'Receiving stream 51%',
+          'Receiving stream 58%',
+          'Receiving stream 61%',
+          'Receiving stream 69% (hehe)',
+          'Receiving stream 72%',
+          'Receiving stream 84%',
+          'Receiving stream 95%',
+          'Receiving stream 96%',
+          'Receiving stream 97%',
+          'Receiving stream 98%',
+          'Receiving stream 99%',
+          'Receiving stream 100%',
+          'Receiving stream 105%',
+          'Receiving stream 110% -- wait.',
+          'Stream received.',
+          'Rendering bounding borders',
+          'Drawing boxes',
+          'Centering divs',
+          'Writing forms',
+          'Sending letters to Santa Claus',
+          'Requesting a raise',
+          'Initializing asteroids',
+          'Inferring types',
+          'Setting any to all unkown types',
+          'Breaking Demeter',
+          'Asteroids initialized',
+          'Launching exploration starship',
+          'Cursor disabled',
+          'Have fun out there',
+          'Welcome to christmas!',
+      ];
+      setTimeout(() => {
+          document.querySelector('.boot-sequence span:last-child').addEventListener('animationend', (e) => {
+              setTimeout(() => {
+                  window.location.href = '/';
+              }, 300)
+          });
+      }, 0)
+
+      return logs;
   }
 
 </script>
