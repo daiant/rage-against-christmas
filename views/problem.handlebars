@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/styles/problem.css">
 
-<div x-data="{ data: {}, ready: false, testCodeResults: [], submittedCodeResult: [], submittingCode: false }"
-     x-init="await getProblem(data); ready = true; loadEditor()">
+<div x-data="{ data: {}, ready: false, showSubmissions: false, testCodeResults: [], submittedCodeResult: [], submittingCode: false }"
+     x-init="await getProblem(data); loadEditor(data.submissions); ready = true;">
 
     <div id="main">
         <div id="description">
@@ -12,22 +12,35 @@
             <div id="editor"></div>
             <div>
                 <div class="code-actions">
-                    <button @click="submittedCodeResult.length = 0; testCode(testCodeResults)">test code</button>
-                    <button class="primary" @click="submittingCode = true; submitProblem(submittedCodeResult).then(() => submittingCode = false)">submit code</button>
+                    <button @click="showSubmissions = !showSubmissions;" style="margin-inline-end: auto" :disabled="submittingCode">Your submissions</button>
+                    <button @click="showSubmissions = false; submittedCodeResult.length = 0; testCode(testCodeResults)" :disabled="submittingCode">test code</button>
+                    <button class="primary" @click="showSubmissions = false; submittingCode = true; submitProblem(submittedCodeResult).then(() => submittingCode = false)" x-text="submittingCode ? 'submitting' : 'submit code'" :disabled="submittingCode"></button>
                 </div>
                 <template x-if="ready">
-                    <div x-data="submissions = data.submissions">
-                        <template x-if="submissions?.length > 0 && submissions.some(s => s.status === 'correct')">
-                            <div>
-                                <p>You submitted an answer for this problem already!</p>
-                                <p
-                                        x-text="await ajax(`/api/problem/{{problem.id}}/submissions/${getUserId()}/fastest`).then(res => res.ok ? res.json() : false) ? 'You have the fastest submission yet!': ''">
-                                </p>
+                    <div x-show="showSubmissions">
+                        <ul>
+                        <template x-for="submission of data.submissions" :key="submission.id">
+                            <div x-data="{open: false}">
+                                <li>
+                                    <button x-text="'Submission ' + submission.id" @click="open = true" @click.outside="open = false"></button>
+                                    <span :class="submission.status" x-text="submission.status"></span>
+                                </li>
+                                <template x-if="open">
+                                    <table style="margin-block: 8px">
+                                        <tr>
+                                            <td style="padding-inline-end: 8px">Output</td>
+                                            <td x-text="submission.output"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-inline-end: 8px;white-space: nowrap">Execution time</td>
+                                            <td x-text="submission.execution_time + ' ms'"></td>
+                                        </tr>
+                                    </table>
+                                </template>
                             </div>
                         </template>
-                        <template x-if="!submissions?.some(s => s.status === 'correct')">
-                            <p>You still hasn't answered this problem.</p>
-                        </template>
+                        </ul>
+
                     </div>
                 </template>
                 <template x-if="testCodeResults?.length">
@@ -37,7 +50,7 @@
                             <template x-for="(result, index) in testCodeResults" :key="index">
                                 <div x-data="{open: false}">
                                     <li>
-                                        <span x-text="'Test Case ' + (index + 1)" @click="open = true" @click.outside="open = false"></span>
+                                        <button x-text="'Test Case ' + (index + 1)" @click="open = true" @click.outside="open = false"></button>
                                         <span :class="result.status" x-text="result.status"></span>
                                     </li>
                                     <template x-if="open">
@@ -101,7 +114,7 @@
     <script src="https://www.unpkg.com/ace-builds@latest/src-noconflict/ext-language_tools.js"></script>
     <script src="https://www.unpkg.com/ace-linters@latest/build/ace-linters.js"></script>
     <script>
-        function loadEditor() {
+        function loadEditor(submissions) {
             ace.require("ace/ext/language_tools"); //To allow autocompletion
             var editor = ace.edit("editor", {
                 enableBasicAutocompletion: true,
@@ -110,7 +123,9 @@
             });
             editor.setTheme("ace/theme/github_dark");
             editor.setOption("showGutter", false);
-            editor.setValue(`{{{problem.initial_code}}}`)
+
+            const lastCorrectSubmissionCode = submissions?.find(s => s.status === 'correct')?.submission;
+            editor.setValue(lastCorrectSubmissionCode ?? `{{{problem.initial_code}}}`)
             editor.clearSelection();
             var provider = LanguageProvider.fromCdn("https://www.unpkg.com/ace-linters@latest/build/");
             provider.registerEditor(editor);
