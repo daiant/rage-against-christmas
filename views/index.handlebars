@@ -13,7 +13,8 @@
 <div>
   <div class="stack" style="width: fit-content;">
       {{#each problems}}
-        <a href="{{concat '/problems/' this.id}}" 
+        <a href="{{concat '/problems/' this.id}}"
+           style="display: flex;"
         x-data="{ isFastestSubmission: false, hasAnsweredCorrectly: false }"
         x-init="
         ajax(`/api/problem/{{this.id}}/submissions/${getUserId()}/fastest`)
@@ -26,8 +27,8 @@
           <span>
             {{concat this.id '.'}}
           </span>
-          <span>
-            <span>{{this.title}}</span>
+          <span style="display: inline-flex; align-items: center; gap: 4px; flex: 1">
+            <span style="flex-grow: 1;margin-inline-end: 8px">{{this.title}}</span>
             <span x-text="hasAnsweredCorrectly ? '★' : '☆'"></span>
             <span x-text="isFastestSubmission  ? '★' : '☆'"></span>
           </span>

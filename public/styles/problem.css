@@ -11,6 +11,20 @@ aside {
   align-self: start;
 }
 
+#description {
+    max-width: 80ch;
+
+    pre {
+        max-width: 100%;
+        border: 1px dashed;
+        padding: 8px;
+        code {
+            max-width: 100%;
+            white-space: break-spaces;
+        }
+    }
+}
+
 #editor {
   resize: vertical;
   min-height: 250px;
@@ -67,6 +81,12 @@ aside {
       }
     }
 }
+
+  td {
+      overflow-wrap: break-word;
+      display: inline-block;
+      max-width: 30ch;
+  }
 
 @media (max-width: 768px) {
   #main {
