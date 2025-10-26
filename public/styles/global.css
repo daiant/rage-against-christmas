@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'BerkeleyMono';
+    src: url('/assets/fonts/BerkeleyMono.woff2') format('woff2');
+}
+
 :root {
     --background: #212034;
     --background-lighter: #AB3131;
@@ -13,7 +18,7 @@
 html,
 body {
     color: var(--foreground);
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'BerkeleyMono', 'Courier New', Courier, monospace;
     height: 100%;
     width: 100%;
     margin: 0;
