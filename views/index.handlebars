@@ -12,6 +12,9 @@
 
 <div style="display: grid; grid-template-columns: 1fr 1fr;">
     <div class="stack" style="width: fit-content;">
+        <p class="section-title">
+            Tareas
+        </p>
         {{#each problems}}
             <a href="{{concat '/problems/' this.id}}"
                style="display: flex; gap: 8px"
@@ -41,6 +44,9 @@
     <div class="article-detail" x-data="{content: ''}">
         <template x-if="!content">
             <div style="justify-self: end; display: flex; flex-direction: column; gap: 8px">
+                <p class="section-title" style="margin-inline-end: 16px">
+                    Artículos
+                </p>
                 {{#each articles}}
                     <button @click="content = `{{this.content}}` ;">{{this.date}}</button>
                 {{ else }}
@@ -50,7 +56,7 @@
         </template>
         <template x-if="content">
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button @click="content = ''" style="margin-inline-start: auto">Volver</button>
+                <button @click="content = ''" style="margin-inline-start: auto" class="primary">volver</button>
                 <div x-html="content" class="article-content"></div>
             </div>
         </template>
