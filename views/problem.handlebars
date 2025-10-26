@@ -6,7 +6,10 @@
     <div id="main">
         <div id="description">
             <h1>{{problem.id}}. {{problem.title}}</h1>
-            {{{problem.content}}}
+            <span><i>{{problem.description}}</i></span>
+            <div style="margin-block-start: 8px; border-top: 1px solid">
+                {{{problem.content}}}
+            </div>
         </div>
 
         <aside>

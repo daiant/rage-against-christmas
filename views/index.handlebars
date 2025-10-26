@@ -1,38 +1,58 @@
 <script>
-  function hasAnsweredCorrectly(problemId, userId) {
-    return ajax(`/api/problem/{{this.id}}/submissions/${getUserId()}/correct`).then(res => res.ok ? res.json() : false).then(d => d ? '★' : '☆');
-  }
+    function hasAnsweredCorrectly(problemId, userId) {
+        return ajax(`/api/problem/{{this.id}}/submissions/${getUserId()}/correct`).then(res => res.ok ? res.json() : false).then(d => d ? '★' : '☆');
+    }
 
-  function isFastestSubmission(problemId, userId) {
-    return ajax(`/api/problem/${problemId}/submissions/fastest`).then(res => res.ok ? res.json() : null).then(data => {
-      return data && data.userId === userId;
-    });
-  }
+    function isFastestSubmission(problemId, userId) {
+        return ajax(`/api/problem/${problemId}/submissions/fastest`).then(res => res.ok ? res.json() : null).then(data => {
+            return data && data.userId === userId;
+        });
+    }
 </script>
 
-<div>
-  <div class="stack" style="width: fit-content;">
-      {{#each problems}}
-        <a href="{{concat '/problems/' this.id}}"
-           style="display: flex; gap: 8px"
-        x-data="{ isFastestSubmission: false, hasAnsweredCorrectly: false }"
-        x-init="
+<div style="display: grid; grid-template-columns: 1fr 1fr;">
+    <div class="stack" style="width: fit-content;">
+        {{#each problems}}
+            <a href="{{concat '/problems/' this.id}}"
+               style="display: flex; gap: 8px"
+               x-data="{ isFastestSubmission: false, hasAnsweredCorrectly: false }"
+               x-init="
         ajax(`/api/problem/{{this.id}}/submissions/${getUserId()}/fastest`)
         .then(res => res.ok ? res.json() : null).then(d => isFastestSubmission = Boolean(d))
         .then(data => { return data && data.userId === getUserId(); }); 
        
         ajax(`/api/problem/{{this.id}}/submissions/${getUserId()}/correct`)
         .then(res => res.ok ? res.json() : false).then(d => hasAnsweredCorrectly = Boolean(d));"
-        >
+            >
           <span>
-            {{concat this.id '. '}}
+              {{concat this.id '. '}}
           </span>
-          <span style="display: inline-flex; align-items: center; gap: 4px; flex: 1">
+                <span style="display: inline-flex; align-items: center; gap: 4px; flex: 1">
             <span style="flex-grow: 1;margin-inline-end: 8px">{{this.title}}</span>
             <span x-text="hasAnsweredCorrectly ? '★' : '☆'"></span>
             <span x-text="isFastestSubmission  ? '★' : '☆'"></span>
           </span>
-        </a>
-      {{/each}}
-  </div>
+            </a>
+        {{else}}
+            Aun no hay problemas disponibles, ¡vuelve mañana mejor!
+        {{/each}}
+    </div>
+
+    <div class="article-detail" x-data="{content: ''}">
+        <template x-if="!content">
+            <div style="justify-self: end; display: flex; flex-direction: column; gap: 8px">
+                {{#each articles}}
+                    <button @click="content = `{{this.content}}` ;">{{this.date}}</button>
+                {{ else }}
+                    Aun no hay nada aqui, ansias.
+                {{/each}}
+            </div>
+        </template>
+        <template x-if="content">
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button @click="content = ''" style="margin-inline-start: auto">Volver</button>
+                <div x-html="content" class="article-content"></div>
+            </div>
+        </template>
+    </div>
 </div>
