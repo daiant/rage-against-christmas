@@ -172,6 +172,11 @@ pre, code {
     text-decoration: underline wavy;
 }
 
+hr {
+    border-color: var(--foreground);
+    border-style: dashed;
+}
+
 @media (max-width: 768px) {
     .navbar {
         flex-wrap: wrap-reverse;
