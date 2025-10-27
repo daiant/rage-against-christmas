@@ -9,6 +9,12 @@
     --foreground: #D9A065;
 }
 
+:root:has(body.pastel-light) {
+    --background: #F9F9F9;
+    --foreground: #A7255F;
+    --background-lighter: #EDABC8;
+}
+
 *,
 *::before,
 *::after {
@@ -139,6 +145,7 @@ input:-webkit-autofill:active {
     padding-block: 16px 32px;
     justify-content: space-between;
     background-color: var(--background);
+    z-index: 2;
 
     .login {
         display: flex;
@@ -167,6 +174,7 @@ pre, code {
 .article-content {
     line-height: 1.4;
 }
+
 .article-content a {
     display: inline;
     text-decoration: underline wavy;
@@ -175,6 +183,23 @@ pre, code {
 hr {
     border-color: var(--foreground);
     border-style: dashed;
+}
+
+.table-with-border {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    tr {
+        border: 1px solid;
+    }
+    td {
+        padding: 4px;
+        width: 50%;
+    }
+    td+td {
+        border-left: 1px solid;
+    }
+
 }
 
 @media (max-width: 768px) {

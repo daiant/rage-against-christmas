@@ -30,10 +30,10 @@
                                     <span :class="submission.status" x-text="submission.status"></span>
                                 </li>
                                 <template x-if="open">
-                                    <table style="margin-block: 8px">
+                                    <table style="margin-block: 8px" class="table-with-border">
                                         <tr>
                                             <td style="padding-inline-end: 8px">Output</td>
-                                            <td x-text="submission.output"></td>
+                                            <td x-text="submission.output || 'undefined'"></td>
                                         </tr>
                                         <tr>
                                             <td style="padding-inline-end: 8px;white-space: nowrap">Execution time</td>
@@ -105,6 +105,10 @@
                                 <span>Execution time</span>
                                 <span x-text="result.execution_time + ' ms'"></span>
                             </li>
+                            <li>
+                                <span>Output</span>
+                                <span x-text="result.output"></span>
+                            </li>
                         </ul>
                         <p x-text="result.status === 'correct' ? 'Congratulations! Code is correct' : 'Buuuuuu tonto'"></p>
                     </div>
@@ -156,6 +160,7 @@
             submittedCodeResult.push({
                 status: response.status,
                 execution_time: response.executionTime,
+                output: response.output,
             })
         }
 

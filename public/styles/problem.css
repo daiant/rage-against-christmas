@@ -31,7 +31,8 @@ aside {
 #editor {
   resize: vertical;
   min-height: 250px;
-  background-color: var(--background) !important;
+  /*  KEEP THIS COLOR */
+  background-color: #212034 !important;
   border: 1px solid var(--foreground);
   padding: 16px;
 }
