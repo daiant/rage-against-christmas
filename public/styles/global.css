@@ -41,12 +41,15 @@ html[data-theme='comic-sans'] {
     body {
         font-family: "Comic Sans MS", "Comic Sans", cursive;
     }
+
     a:hover {
         color: white
     }
+
     button:hover {
         color: white;
     }
+
     ::selection {
         background: var(--foreground);
         color: white;
@@ -57,6 +60,7 @@ html[data-theme='comic-sans'] {
 *::before,
 *::after {
     box-sizing: border-box;
+    user-select: none;
 }
 
 html,
@@ -162,6 +166,7 @@ input:-webkit-autofill:active {
 
 .dotted-background, .section-title {
     position: relative;
+    background: var(--background);
 
     &::after {
         content: '';
@@ -246,6 +251,84 @@ hr {
 
 }
 
+#contextmenu {
+    margin-block: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: none;
+
+
+    &.active {
+        display: block;
+    }
+
+    [role=list] {
+        background-color: var(--background);
+        border: 1px solid var(--foreground);
+    }
+
+    p {
+        margin-block: 0;
+    }
+
+    [role=listitem] {
+        padding-inline: 4px;
+        cursor: pointer;
+        color: var(--foreground);
+
+        &:hover {
+            background-color: var(--foreground);
+            color: var(--background);
+        }
+    }
+
+    .expandable {
+        position: relative;
+
+        > p::after {
+            content: '▸';
+            margin-inline-start: 8px;
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-60%);
+        }
+
+        &.visible {
+            [role=list] {
+                visibility: visible;
+            }
+        }
+
+        [role=list] {
+            position: absolute;
+            top: -1px;
+            left: 100%;
+            visibility: hidden;
+
+            &.right::before {
+                left: -20%;
+            }
+
+            &.left::before {
+                right: -20%;
+            }
+
+            &:before {
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 20%;
+                z-index: 0;
+            }
+        }
+    }
+
+}
+
 @media (max-width: 768px) {
     .navbar {
         flex-wrap: wrap-reverse;
@@ -265,3 +348,4 @@ hr {
         white-space: nowrap;
     }
 }
+
