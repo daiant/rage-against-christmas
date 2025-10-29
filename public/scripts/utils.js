@@ -40,6 +40,10 @@ function contextMenu(event) {
     }
     event.preventDefault();
     const contextMenu = document.querySelector('#contextmenu');
+
+    if (contextMenu.contains(event.target)) {
+        return;
+    }
     const {width: bodyWidth, height: bodyHeight} = globalThis.document.body.getBoundingClientRect();
     const {width: contextMenuWidth, height: contextMenuHeight} = contextMenu.getBoundingClientRect();
 

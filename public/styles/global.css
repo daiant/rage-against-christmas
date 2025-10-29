@@ -257,11 +257,11 @@ hr {
     top: 0;
     left: 0;
     z-index: 1000;
-    display: none;
+    visibility: hidden;
 
 
     &.active {
-        display: block;
+        visibility: visible;
     }
 
     [role=list] {
