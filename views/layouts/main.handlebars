@@ -19,6 +19,9 @@
         }"
         x-init="
             document.documentElement.setAttribute('data-theme', theme);
+            if(!getUserId()) {
+            window.location.href = '/login';
+            };
 ">
 <div class="navbar">
     <div class="breadcrumbs">

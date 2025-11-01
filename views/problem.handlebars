@@ -16,33 +16,41 @@
             <div id="editor"></div>
             <div>
                 <div class="code-actions">
-                    <button @click="showSubmissions = !showSubmissions;" style="margin-inline-end: auto" :disabled="submittingCode">Your submissions</button>
-                    <button @click="showSubmissions = false; submittedCodeResult.length = 0; testCode(testCodeResults)" :disabled="submittingCode">test code</button>
-                    <button class="primary" @click="showSubmissions = false; submittingCode = true; submitProblem(submittedCodeResult).then(() => submittingCode = false)" x-text="submittingCode ? 'submitting' : 'submit code'" :disabled="submittingCode"></button>
+                    <button @click="showSubmissions = !showSubmissions;" style="margin-inline-end: auto"
+                            :disabled="submittingCode">Your submissions
+                    </button>
+                    <button @click="showSubmissions = false; submittedCodeResult.length = 0; testCode(testCodeResults)"
+                            :disabled="submittingCode">test code
+                    </button>
+                    <button class="primary"
+                            @click="showSubmissions = false; submittingCode = true; submitProblem(submittedCodeResult).then(() => submittingCode = false)"
+                            x-text="submittingCode ? 'submitting' : 'submit code'" :disabled="submittingCode"></button>
                 </div>
                 <template x-if="ready">
                     <div x-show="showSubmissions">
                         <ul>
-                        <template x-for="submission of data.submissions" :key="submission.id">
-                            <div x-data="{open: false}">
-                                <li>
-                                    <button x-text="'Submission ' + submission.id" @click="open = true" @click.outside="open = false"></button>
-                                    <span :class="submission.status" x-text="submission.status"></span>
-                                </li>
-                                <template x-if="open">
-                                    <table style="margin-block: 8px" class="table-with-border">
-                                        <tr>
-                                            <td style="padding-inline-end: 8px">Output</td>
-                                            <td x-text="submission.output || 'undefined'"></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-inline-end: 8px;white-space: nowrap">Execution time</td>
-                                            <td x-text="submission.execution_time + ' ms'"></td>
-                                        </tr>
-                                    </table>
-                                </template>
-                            </div>
-                        </template>
+                            <template x-for="submission of data.submissions" :key="submission.id">
+                                <div x-data="{open: false}">
+                                    <li>
+                                        <button x-text="'Submission ' + submission.id" @click="open = true"
+                                                @click.outside="open = false"></button>
+                                        <span :class="submission.status" x-text="submission.status"></span>
+                                    </li>
+                                    <template x-if="open">
+                                        <table style="margin-block: 8px" class="table-with-border">
+                                            <tr>
+                                                <td style="padding-inline-end: 8px">Output</td>
+                                                <td x-text="submission.output || 'undefined'"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-inline-end: 8px;white-space: nowrap">Execution time
+                                                </td>
+                                                <td x-text="submission.execution_time + ' ms'"></td>
+                                            </tr>
+                                        </table>
+                                    </template>
+                                </div>
+                            </template>
                         </ul>
 
                     </div>
@@ -54,7 +62,8 @@
                             <template x-for="(result, index) in testCodeResults" :key="index">
                                 <div x-data="{open: false}">
                                     <li>
-                                        <button x-text="'Test Case ' + (index + 1)" @click="open = true" @click.outside="open = false"></button>
+                                        <button x-text="'Test Case ' + (index + 1)" @click="open = true"
+                                                @click.outside="open = false"></button>
                                         <span :class="result.status" x-text="result.status"></span>
                                     </li>
                                     <template x-if="open">
@@ -141,7 +150,6 @@
 
         async function getProblem(data) {
             const userId = getUserId();
-            if (!userId) alert('No user id found, please login first');
 
             const subs = await ajax(`/api/problem/{{problem.id}}/submissions/${userId}`).then(res => res.json());
             data.submissions = subs.submissions;
