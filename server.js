@@ -83,14 +83,18 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/problems/:id', (req, res) => {
-    db.getProblemById(req.params.id).then(problem =>
-        res.render('problem', {problem: problem})
+    db.getProblemById(req.params.id).then(problem => {
+            if (!problem) return res.status(404).end();
+            res.render('problem', {problem: problem})
+        }
     );
 });
 
 app.get('/problem/:id', (req, res) => {
-    db.getProblemById(req.params.id).then(problem =>
-        res.render('problem', {problem: problem})
+    db.getProblemById(req.params.id).then(problem => {
+            if (!problem) return res.status(404).end();
+            res.render('problem', {problem: problem})
+        }
     );
 });
 

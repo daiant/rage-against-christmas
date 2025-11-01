@@ -10,7 +10,7 @@
     }
 </script>
 
-<div style="display: grid; grid-template-columns: 1fr 1fr;">
+<div class="grid-wrapper">
     <div class="stack" style="width: fit-content;">
         <p class="section-title">
             Tareas
@@ -50,7 +50,7 @@
                 {{#each articles}}
                     <button @click="content = `{{this.content}}` ;">{{this.date}}</button>
                 {{ else }}
-                    Aun no hay nada aqui, ansias.
+                    Aun no hay nada aquí, ansias.
                 {{/each}}
             </div>
         </template>

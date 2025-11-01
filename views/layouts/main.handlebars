@@ -38,39 +38,23 @@
     {{{ body }}}
 </div>
 
-<footer style="display: flex; gap: 8px; align-items: center;justify-content: flex-end">
-    <p>v1.4</p>
-    <p>///</p>
-    <div x-data="{open: false}" style="position: relative;">
-        <button x-text="theme" style="padding-inline: 0" @click="open = !open"></button>
-        <template x-if="open">
-            <div style="position:absolute; background: var(--background); border: 1px solid;bottom: calc(100% + 16px + 6px); right: 16px;min-width: 100%">
-                <div class="dotted-background">
-                    <template x-for="availableTheme in availableThemes" :key="availableTheme">
-                        <button
-                                @click="
-                            theme = availableTheme;
-                            localStorage.setItem('theme', availableTheme);
-                            open = false;
-                            document.documentElement.setAttribute('data-theme', availableTheme);
-                        "
-                                x-text="availableTheme"
-                                style="width: 100%;text-align: left;white-space: nowrap"
-                        ></button>
-                    </template>
-                </div>
-            </div>
-        </template>
-    </div>
-    <p>///</p>
-    <p x-text="new Intl.DateTimeFormat('es', {weekday: 'long', day: 'numeric'}).format(new Date())"></p>
-    <p>///</p>
-    <p x-data="{time: new Date(), formatter: new Intl.DateTimeFormat('es', {timeStyle: 'long'})}" x-init=" setInterval(() => {
+<footer style="overflow-x: auto">
+    <div style="display: flex; gap: 8px; align-items: center;justify-content: safe flex-end;">
+        <p style="white-space: nowrap">v1.4</p>
+        <p>///</p>
+        <p x-text="theme" style="padding-inline: 0; white-space: nowrap"></p>
+        <p>///</p>
+        <p x-text="new Intl.DateTimeFormat('es', {weekday: 'long', day: 'numeric'}).format(new Date())"
+           style="white-space: nowrap"></p>
+        <p>///</p>
+        <p x-data="{time: new Date(), formatter: new Intl.DateTimeFormat('es', {timeStyle: 'long'})}" x-init=" setInterval(() => {
         time = new Date();
     }, 1000)
 "
-       x-text="formatter.format(time)"
-    ></p>
+           x-text="formatter.format(time)"
+           style="white-space: nowrap"
+        ></p>
+    </div>
 </footer>
 
 <div id="contextmenu">

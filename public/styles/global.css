@@ -207,6 +207,11 @@ input:-webkit-autofill:active {
     }
 }
 
+.grid-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
 .stack {
     display: flex;
     flex-direction: column;
@@ -346,6 +351,12 @@ hr {
     .navbar .breadcrumbs * {
         flex: 1;
         white-space: nowrap;
+    }
+
+    .grid-wrapper {
+        grid-template-columns: 1fr;
+        justify-items: start;
+        gap: 32px;
     }
 }
 
