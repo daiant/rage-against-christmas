@@ -8,6 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/global.css">
     <title>Rage Against Christmas</title>
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96"/>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+    <meta name="apple-mobile-web-app-title" content="MyWebSite"/>
+    <link rel="manifest" href="/site.webmanifest"/>
     <style>
         body, .boot-sequence {
             position: relative;
@@ -106,7 +112,8 @@
     </div>
     <div x-show="username">
         <label for="password">Password:</label>
-        <input type="password" id="password" autocomplete="current-password" @keydown.enter="login" x-model="password" required/>
+        <input type="password" id="password" autocomplete="current-password" @keydown.enter="login" x-model="password"
+               required/>
     </div>
     <p x-show="invalidPassword" x-text="`Failed username for ${username} from ${ip} port 80`">
 
@@ -118,8 +125,9 @@
 
 <script>
     var isLogin = false;
+
     async function login() {
-        if(isLogin) return;
+        if (isLogin) return;
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         this.invalidPassword = false;
@@ -142,7 +150,7 @@
                         document.querySelector('#username').focus();
                     }
                 }).finally(() => {
-                    isLogin = false;
+            isLogin = false;
         });
     }
 
