@@ -358,5 +358,22 @@ hr {
         justify-items: start;
         gap: 32px;
     }
+
+    #contextmenu {
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+
+        .expandable.visible [role=list] {
+            display: block;
+        }
+
+        .expandable [role=list] {
+            position: relative !important;
+            right: unset !important;
+            left: unset !important;
+            display: none;
+        }
+    }
 }
 
