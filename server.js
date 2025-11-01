@@ -84,7 +84,7 @@ app.get('/login', (req, res) => {
 
 app.get('/problems/:id', (req, res) => {
     db.getProblemById(req.params.id).then(problem => {
-            if (!problem) return res.status(404).end();
+            if (!problem) return res.render('404');
             res.render('problem', {problem: problem})
         }
     );
@@ -92,7 +92,7 @@ app.get('/problems/:id', (req, res) => {
 
 app.get('/problem/:id', (req, res) => {
     db.getProblemById(req.params.id).then(problem => {
-            if (!problem) return res.status(404).end();
+            if (!problem) return res.render('404');
             res.render('problem', {problem: problem})
         }
     );
@@ -163,6 +163,11 @@ apiRouter.post('/login', (req, res) => {
 // });
 
 app.use('/api', apiRouter);
+
+
+app.all('/{*any}', (req, res) => {
+    res.render('404');
+});
 
 app.listen(port, () => {
     console.log(`Rage Against Port ${port}`);
