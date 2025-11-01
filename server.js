@@ -152,16 +152,6 @@ apiRouter.post('/login', (req, res) => {
     })
 });
 
-// apiRouter.get('/leaderboard', (req, res) => {
-//   db.getAllSubmissions().then(submissions => {
-//     res.send({
-//       leaderboard:
-//         calculateLeaderBoard(submissions)
-//     })
-//   }
-//   );
-// });
-
 app.use('/api', apiRouter);
 
 

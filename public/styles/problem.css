@@ -1,17 +1,18 @@
 h1 {
     margin-block-start: 0;
 }
+
 #main {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin-block-start: 16px;
-  gap: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-block-start: 16px;
+    gap: 32px;
 }
 
 aside {
-  position: sticky;
-  top: 68px;
-  align-self: start;
+    position: sticky;
+    top: 86px;
+    align-self: start;
 }
 
 #description {
@@ -21,6 +22,7 @@ aside {
         max-width: 100%;
         border: 1px dashed;
         padding: 8px;
+
         code {
             max-width: 100%;
             white-space: break-spaces;
@@ -29,76 +31,77 @@ aside {
 }
 
 #editor {
-  resize: vertical;
-  min-height: 250px;
-  /*  KEEP THIS COLOR */
-  background-color: #212034 !important;
-  border: 1px solid var(--foreground);
-  padding: 16px;
+    resize: vertical;
+    min-height: 250px;
+    /*  KEEP THIS COLOR */
+    background-color: #212034 !important;
+    border: 1px solid var(--foreground);
+    padding: 16px;
 }
 
 .code-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-block: 8px;
-  gap: 8px;
+    display: flex;
+    justify-content: flex-end;
+    margin-block: 8px;
+    gap: 8px;
 }
 
-  ul {
+ul {
     list-style: none;
     display: grid;
     gap: 8px;
     max-width: 405px;
 
     li {
-      position: relative;
-      display: flex;
-      justify-content: space-between;
-      gap: 64px;
-      overflow: hidden;
-      white-space: nowrap;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        gap: 64px;
+        overflow: hidden;
+        white-space: nowrap;
 
-      &::after {
-        content: '..................................................................................................................';
-        position: absolute;
-        z-index: -1;
-        user-select: none;
-      }
-
-      button {
-        border-radius: 0 !important;
-      }
-      button, span {
-        width: fit-content;
-        background-color: var(--background);
-        border-radius: 4px;
-        padding-inline: 4px;
-
-        &.correct {
-          background-color: var(--foreground);
-          color: var(--background);
+        &::after {
+            content: '..................................................................................................................';
+            position: absolute;
+            z-index: -1;
+            user-select: none;
         }
 
-        &.incorrect {
-          background-color: var(--background-lighter);
+        button {
+            border-radius: 0 !important;
         }
-      }
+
+        button, span {
+            width: fit-content;
+            background-color: var(--background);
+            border-radius: 4px;
+            padding-inline: 4px;
+
+            &.correct {
+                background-color: var(--foreground);
+                color: var(--background);
+            }
+
+            &.incorrect {
+                background-color: var(--background-lighter);
+            }
+        }
     }
 }
 
-  td {
-      overflow-wrap: break-word;
-      display: inline-block;
-      max-width: 30ch;
-  }
+td {
+    overflow-wrap: break-word;
+    display: inline-block;
+    max-width: 30ch;
+}
 
 @media (max-width: 768px) {
-  #main {
-    grid-template-columns: 1fr;
-  }
+    #main {
+        grid-template-columns: 1fr;
+    }
 
-  aside {
-    position: static;
-    top: auto;
-  }
+    aside {
+        position: static;
+        top: auto;
+    }
 }
