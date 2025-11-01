@@ -3,6 +3,7 @@
 <style>
     table {
         border-collapse: collapse;
+
         th, td {
             border: 1px solid;
             padding: 4px 12px;
@@ -10,24 +11,24 @@
     }
 </style>
 <div style="display: grid;place-content: center;">
-    <h1 style="margin-block-end: 0">Top scorers this event</h1>
-    <p>Submissions end in 24 hours.</p>
+    <h1 style="margin-block-end: 0">Los más listos</h1>
+    <p>Quien tenga más puntos, gana.</p>
     <table>
-      <thead>
+        <thead>
         <tr>
-          <th>#</th>
-          <th>Username</th>
-          <th>Submissions</th>
-          <th>Score</th>
+            <th>#</th>
+            <th>Username</th>
+            <th>Submissions</th>
+            <th>Score</th>
         </tr>
-      </thead>
+        </thead>
         {{#each leaderboard}}
-          <tr>
-            <td>{{sum @index 1}}</td>
-            <td>{{this.username}}</td>
-            <td>{{this.submissionsLength}}</td>
-            <td>{{this.score}}</td>
-          </tr>
+            <tr>
+                <td>{{sum @index 1}}</td>
+                <td>{{this.username}}</td>
+                <td>{{this.submissionsLength}}</td>
+                <td>{{this.score}}</td>
+            </tr>
         {{/each}}
     </table>
 
