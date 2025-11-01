@@ -161,4 +161,4 @@ app.all('/{*any}', (req, res) => {
 
 app.listen(port, () => {
     console.log(`Rage Against Port ${port}`);
-})
+});
