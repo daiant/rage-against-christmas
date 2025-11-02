@@ -71,26 +71,29 @@ ul {
             border-radius: 0 !important;
         }
 
-        button, span {
-            width: fit-content;
-            background-color: var(--background);
-            border-radius: 4px;
-            padding-inline: 4px;
-
-            &.correct {
-                background-color: var(--foreground);
-                color: var(--background);
-            }
-
-            &.incorrect {
-                background-color: var(--background-lighter);
-            }
-        }
     }
 }
 
-td {
-    overflow-wrap: break-word;
+button, span {
+    width: fit-content;
+    white-space: nowrap;
+    background-color: var(--background);
+    border-radius: 4px;
+    padding-inline: 4px;
+
+    &.correct {
+        background-color: var(--foreground);
+        color: var(--background);
+    }
+
+    &.incorrect {
+        background-color: var(--background-lighter);
+    }
+}
+
+td span {
+    overflow: hidden;
+    text-overflow: ellipsis;
     display: inline-block;
     max-width: 30ch;
 }

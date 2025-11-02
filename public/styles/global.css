@@ -281,19 +281,18 @@ hr {
 
 .table-with-border {
     border-collapse: collapse;
-    table-layout: fixed;
+    text-align: left;
     width: 100%;
 
     tr {
         border: 1px solid;
     }
 
-    td {
+    td, th {
         padding: 4px;
-        width: 50%;
     }
 
-    td + td {
+    td + td, th + th {
         border-left: 1px solid;
     }
 

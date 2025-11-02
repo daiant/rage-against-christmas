@@ -1,7 +1,7 @@
 const {Database} = require('./lib/db/db');
 const {calculateLeaderBoard} = require('./lib/submissions/calculate-leaderboard');
 const db = new Database();
-const {calculateSubmission} = require('./lib/submissions/calculate-submission');
+const {calculateSubmission, calculateSubmissions} = require('./lib/submissions/calculate-submission');
 const {create} = require('express-handlebars');
 const {comparePassword} = require("./lib/user/password");
 
@@ -135,15 +135,24 @@ apiRouter.get('/problem/:id/submissions/:userId/fastest', (req, res) => {
 
 apiRouter.post('/problem/:id/submit', async (req, res) => {
     const problem = await db.getProblemById(req.params.id);
-    const {input, answer} = await db.getProblemAnswer(req.params.id);
     if (!problem) res.status(404).send({error: 'Problem not found or not active'});
 
-    const result = await calculateSubmission(input, answer, req.body.code);
-    const status = result.output && String(result.output) === String(answer) ? 'correct' : 'incorrect';
+    const tests = await db.getAllProblemTestCases(req.params.id);
+
+    const result = await calculateSubmissions(tests, req.body.code);
+    const status = result.status ? 'correct' : 'incorrect';
 
     console.log(`user ${req.userId} submitted answer for problem ${req.params.id}. Status is: ${status}. Timestamp: ${Date.now()}.`);
-    await db.submitAnswer(req.params.id, req.body.code, result, status, req.userId);
-    res.send({problemId: req.params.id, status, executionTime: result.executionTime, output: result.output});
+
+    await db.submitAnswer(
+        req.params.id,
+        req.body.code,
+        result.output,
+        result.executionTime,
+        status,
+        req.userId);
+
+    res.send({problemId: req.params.id, status, tests: result.tests});
 });
 
 apiRouter.post('/login', (req, res) => {

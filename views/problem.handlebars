@@ -23,7 +23,7 @@
                             :disabled="submittingCode">test code
                     </button>
                     <button class="primary"
-                            @click="showSubmissions = false; submittingCode = true; submitProblem(submittedCodeResult).then(() => submittingCode = false)"
+                            @click="showSubmissions = false; submittingCode = true; submitProblem(submittedCodeResult, testCodeResults).then(() => submittingCode = false)"
                             x-text="submittingCode ? 'submitting' : 'submit code'" :disabled="submittingCode"></button>
                 </div>
                 <template x-if="ready">
@@ -39,13 +39,15 @@
                                     <template x-if="open">
                                         <table style="margin-block: 8px" class="table-with-border">
                                             <tr>
-                                                <td style="padding-inline-end: 8px">Output</td>
-                                                <td x-text="truncate(submission.output || 'undefined')"></td>
-                                            </tr>
-                                            <tr>
                                                 <td style="padding-inline-end: 8px;white-space: nowrap">Execution time
                                                 </td>
                                                 <td x-text="submission.execution_time + ' ms'"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-inline-end: 8px;white-space: nowrap">Time to be the
+                                                    fastest
+                                                </td>
+                                                <td x-text="'{{problem.execution_time_threshold}} ms'"></td>
                                             </tr>
                                         </table>
                                     </template>
@@ -73,7 +75,7 @@
                                                 <td x-text="truncate(result.input)"></td>
                                             </tr>
                                             <tr>
-                                                <td style="padding-inline-end: 8px">Output</td>
+                                                <td style="padding-inline-end: 8px">Desired output</td>
                                                 <td x-text="truncate(result.desiredOutput)"></td>
                                             </tr>
                                             <tr>
@@ -114,11 +116,35 @@
                                 <span>Execution time</span>
                                 <span x-text="result.execution_time + ' ms'"></span>
                             </li>
-                            <li>
-                                <span>Output</span>
-                                <span x-text="truncate(result.output)"></span>
-                            </li>
                         </ul>
+                        <div style="overflow-x:auto;">
+                            <table style="margin-block: 8px; table-layout: auto " class="table-with-border">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Status</th>
+                                    <th>Input</th>
+                                    <th>Desired Output</th>
+                                    <th>Received</th>
+                                    <th>Execution Time</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <template x-for="(test, index) in result.tests" :key="index">
+                                    <tr>
+                                        <td><span x-text="index + 1"></span></td>
+                                        <td><span x-text="test.status ? 'correct' : 'incorrect'"
+                                                  :class="test.status ? 'correct' : 'incorrect'"></span></td>
+                                        <td><span x-text="test.input"></span></td>
+                                        <td><span x-text="truncate(test.desiredOutput)"></span></td>
+                                        <td><span x-text="test.output"></span></td>
+                                        <td><span x-text="test.executionTime + ' ms'"></span></td>
+                                    </tr>
+                                </template>
+                                </tbody>
+                            </table>
+                            <i>Tip: consulta en la consola los datos completos si se muestran del todo aquí.</i>
+                        </div>
                         <p x-text="result.status === 'correct' ? '¡Enhorabuena! Has conseguido pasar la prueba.' : 'El resultado no es correcto. Intenta averiguar por qué.'"></p>
                     </div>
                 </template>
@@ -155,8 +181,9 @@
             data.submissions = subs.submissions;
         }
 
-        async function submitProblem(submittedCodeResult) {
+        async function submitProblem(submittedCodeResult, testCodeResults) {
             submittedCodeResult.length = 0;
+            testCodeResults.length = 0;
 
             const code = ace.edit("editor").getValue();
 
@@ -165,10 +192,14 @@
                 body: JSON.stringify({code})
             }).then(res => res.json());
 
+            console.debug('Submission result');
+            console.log(response);
+
             submittedCodeResult.push({
                 status: response.status,
                 execution_time: response.executionTime,
                 output: response.output,
+                tests: response.tests
             })
         }
 
