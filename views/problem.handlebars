@@ -40,7 +40,7 @@
                                         <table style="margin-block: 8px" class="table-with-border">
                                             <tr>
                                                 <td style="padding-inline-end: 8px">Output</td>
-                                                <td x-text="submission.output || 'undefined'"></td>
+                                                <td x-text="truncate(submission.output || 'undefined')"></td>
                                             </tr>
                                             <tr>
                                                 <td style="padding-inline-end: 8px;white-space: nowrap">Execution time
@@ -67,18 +67,18 @@
                                         <span :class="result.status" x-text="result.status"></span>
                                     </li>
                                     <template x-if="open">
-                                        <table style="margin-block: 8px">
+                                        <table style="margin-block: 8px" class="table-with-border">
                                             <tr>
                                                 <td style="padding-inline-end: 8px">Input</td>
-                                                <td x-text="result.input"></td>
+                                                <td x-text="truncate(result.input)"></td>
                                             </tr>
                                             <tr>
                                                 <td style="padding-inline-end: 8px">Output</td>
-                                                <td x-text="result.desiredOutput"></td>
+                                                <td x-text="truncate(result.desiredOutput)"></td>
                                             </tr>
                                             <tr>
                                                 <td style="padding-inline-end: 8px">Received</td>
-                                                <td x-text="result.output"></td>
+                                                <td x-text="truncate(result.output)"></td>
                                             </tr>
                                         </table>
                                     </template>
@@ -116,10 +116,10 @@
                             </li>
                             <li>
                                 <span>Output</span>
-                                <span x-text="result.output"></span>
+                                <span x-text="truncate(result.output)"></span>
                             </li>
                         </ul>
-                        <p x-text="result.status === 'correct' ? 'Congratulations! Code is correct' : 'Buuuuuu tonto'"></p>
+                        <p x-text="result.status === 'correct' ? '¡Enhorabuena! Has conseguido pasar la prueba.' : 'El resultado no es correcto. Intenta averiguar por qué.'"></p>
                     </div>
                 </template>
             </div>
