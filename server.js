@@ -3,8 +3,10 @@ const {calculateLeaderBoard} = require('./lib/submissions/calculate-leaderboard'
 const db = new Database();
 const {calculateSubmission} = require('./lib/submissions/calculate-submission');
 const {create} = require('express-handlebars');
+const {comparePassword} = require("./lib/user/password");
 
 const express = require('express');
+
 const app = express();
 const port = 3000;
 
@@ -146,11 +148,19 @@ apiRouter.post('/problem/:id/submit', async (req, res) => {
 
 apiRouter.post('/login', (req, res) => {
     const {username: alias, password} = req.body;
-    db.getUser(alias, password).then(user => {
+    db.getUser(alias, password).then(async user => {
         if (!user) {
             res.status(401).send({error: 'Invalid credentials'});
             return;
         }
+
+        const hasPassword = await comparePassword(password, user.password);
+
+        if (!hasPassword) {
+            res.status(401).send({error: 'Invalid credentials'});
+            return;
+        }
+
         res.send({accessToken: user.accessToken, userId: user.id, userName: user.alias});
     })
 });
