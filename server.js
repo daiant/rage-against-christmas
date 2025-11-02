@@ -67,13 +67,14 @@ app.get('/problems', async (req, res) => {
 });
 
 app.get('/leaderboard', (req, res) => {
-    db.getAllSubmissions().then(submissions => {
-            res.render('leaderboard', {
-                leaderboard:
-                    calculateLeaderBoard(submissions)
-            })
-        }
-    );
+    Promise.all([
+        db.getAllUsers(),
+        db.getAllSubmissions(),
+    ]).then(([users, submissions]) => {
+        res.render('leaderboard', {
+            leaderboard: calculateLeaderBoard(users, submissions),
+        })
+    });
 });
 
 app.get('/login', (req, res) => {

@@ -21,7 +21,7 @@
         x-cloak
         style="display: flex; flex-direction: column; min-height: 100vh; "
         x-data="{
-            crt: localStorage.getItem('crt') ?? false,
+            crt: localStorage.getItem('crt') === 'true',
             theme: localStorage.getItem('theme') || 'hacker',
             availableThemes: ['hacker', 'solarized-dark', 'solarized-light', 'pastel-light', 'cyberpunk', 'comic-sans']
         }"
@@ -38,16 +38,18 @@
             window.location.href = '/login';
             };
 ">
-<div class="navbar">
-    <div class="breadcrumbs">
-        <a href="/">Rage against christmas</a>
+<nav>
+    <div class="navbar">
+        <div class="breadcrumbs">
+            <a href="/">Rage against christmas</a>
+        </div>
+        <a href="/leaderboard">Leaderboard</a>
+        <div class="login">
+            <span x-text="getUserName()"></span>
+            <button onclick="logout()">logout</button>
+        </div>
     </div>
-    <a href="/leaderboard">Leaderboard</a>
-    <div class="login">
-        <span x-text="getUserName()"></span>
-        <button onclick="logout()">logout</button>
-    </div>
-</div>
+</nav>
 
 <div style="flex: 1;">
     {{{ body }}}

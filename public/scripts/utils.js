@@ -10,7 +10,7 @@ function truncate(str, max = 125) {
     if (str.length > max) {
         str = str.substring(0, max) + '...';
     }
-    
+
     return str;
 }
 
@@ -71,7 +71,7 @@ window.onload = () => {
         removeContextMenu(event.target);
     });
 
-    contextmenu.querySelectorAll('.expandable').forEach(el => {
+    contextmenu?.querySelectorAll('.expandable').forEach(el => {
         el.addEventListener('mouseenter', (event) => {
             const subSection = el.querySelector('[role=list]')
             const {width: elWidth, left: elLeft, top: elTop} = el.getBoundingClientRect();
