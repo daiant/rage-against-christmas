@@ -41,14 +41,15 @@
         {{/each}}
     </div>
 
-    <div class="article-detail" x-data="{content: ''}">
+    <div class="stack articles" x-data="{content: '', title: ''}" style="align-items: flex-end">
+        <p class="section-title" style="margin-inline-end: 16px">
+            Artículos
+        </p>
         <template x-if="!content">
-            <div style="justify-self: end; display: flex; flex-direction: column; gap: 8px">
-                <p class="section-title" style="margin-inline-end: 16px">
-                    Artículos
-                </p>
+            <div style="justify-self: end; display: flex; flex-direction: column; gap: 8px" class="article-list">
                 {{#each articles}}
-                    <button @click="content = `{{this.content}}` ;">{{this.date}}</button>
+                    <button @click="content = `{{this.content}}`; title = `{{this.date}}` ;"
+                            style="width: fit-content">{{this.date}}</button>
                 {{ else }}
                     Aun no hay nada aquí, ansias.
                 {{/each}}
@@ -56,7 +57,10 @@
         </template>
         <template x-if="content">
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button @click="content = ''" style="margin-inline-start: auto" class="primary">volver</button>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+                    <span x-text="title"></span>
+                    <button @click="content = ''" style="margin-inline-start: auto" class="primary">volver</button>
+                </div>
                 <div x-html="content" class="article-content"></div>
             </div>
         </template>

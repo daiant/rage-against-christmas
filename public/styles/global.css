@@ -258,6 +258,10 @@ pre, code {
     font-size: 15px;
 }
 
+.article-list button {
+    margin-left: auto;
+}
+
 .article-content {
     line-height: 1.4;
 }
@@ -393,6 +397,18 @@ hr {
         grid-template-columns: 1fr;
         justify-items: start;
         gap: 32px;
+    }
+
+    .articles {
+        align-items: flex-start !important;
+    }
+
+    .article-list {
+        justify-content: flex-start;
+
+        button {
+            margin-left: unset;
+        }
     }
 
     #contextmenu {
