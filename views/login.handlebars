@@ -15,35 +15,6 @@
     <meta name="apple-mobile-web-app-title" content="MyWebSite"/>
     <link rel="manifest" href="/site.webmanifest"/>
     <style>
-        body, .boot-sequence {
-            position: relative;
-            --crt-red: rgb(218, 49, 49);
-            --crt-green: rgb(112, 159, 115);
-            --crt-blue: rgb(40, 129, 206);
-
-            &::before {
-                background: repeating-linear-gradient(var(--crt-red) 0px, var(--crt-green) 2px, var(--crt-blue) 4px)
-            }
-
-            &::after {
-                background: repeating-linear-gradient(90deg, var(--crt-red) 1px, var(--crt-green) 2px, var(--crt-blue) 3px);
-            }
-
-            &::before, &::after {
-                content: "";
-                transform: translateZ(0);
-                pointer-events: none;
-                mix-blend-mode: overlay;
-                position: absolute;
-                height: 100%;
-                width: 100%;
-                left: 0;
-                top: 0;
-                z-index: 1;
-
-            }
-        }
-
         form input {
             border: none;
             padding: 0;
@@ -90,7 +61,8 @@
     </style>
 </head>
 
-<body x-data="{logs: [], username: '', password: '', ip: '174.127.0.234', invalidPassword: false, setUsername(event) {this.username = event.target.value;  setTimeout(() => {document.querySelector('#password').focus();}, 10) }}">
+<body class="crt-enabled"
+      x-data="{logs: [], username: '', password: '', ip: '174.127.0.234', invalidPassword: false, setUsername(event) {this.username = event.target.value;  setTimeout(() => {document.querySelector('#password').focus();}, 10) }}">
 
 <div class="boot-sequence" x-show="logs.length > 0">
     <template x-for="(log, index) of logs">
@@ -102,7 +74,7 @@
 <form>
     <div style="display: flex; align-items: center;gap:8px">
         <p>Rage Against Christmas</p>
-        <p>v1.4</p>
+        <p>v1.9</p>
     </div>
     <div>
         <label for="username">Username:</label>

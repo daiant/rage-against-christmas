@@ -75,9 +75,45 @@ body {
 
 html {
     background: var(--background);
+}
+
+body {
+
     padding-inline: 16px;
 }
 
+[x-cloak] {
+    display: none !important;
+}
+
+body.crt-enabled, .boot-sequence, body.crt-enabled .navbar, body.crt-enabled #contextmenu .list {
+    position: relative;
+    --crt-red: rgb(218, 49, 49);
+    --crt-green: rgb(112, 159, 115);
+    --crt-blue: rgb(40, 129, 206);
+
+    &::before {
+        background: repeating-linear-gradient(var(--crt-red) 0px, var(--crt-green) 2px, var(--crt-blue) 4px)
+    }
+
+    &::after {
+        background: repeating-linear-gradient(90deg, var(--crt-red) 1px, var(--crt-green) 2px, var(--crt-blue) 3px);
+    }
+
+    &::before, &::after {
+        content: "";
+        transform: translateZ(0);
+        pointer-events: none;
+        mix-blend-mode: overlay;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        left: 0;
+        top: 0;
+        z-index: 1;
+
+    }
+}
 
 ::selection {
     background: var(--foreground);

@@ -18,13 +18,22 @@
 </head>
 
 <body
+        x-cloak
         style="display: flex; flex-direction: column; min-height: 100vh; "
         x-data="{
+            crt: localStorage.getItem('crt') ?? false,
             theme: localStorage.getItem('theme') || 'hacker',
             availableThemes: ['hacker', 'solarized-dark', 'solarized-light', 'pastel-light', 'cyberpunk', 'comic-sans']
         }"
         x-init="
             document.documentElement.setAttribute('data-theme', theme);
+
+            if(crt) {
+                document.body.classList.add('crt-enabled');
+            } else {
+                document.body.classList.remove('crt-enabled');
+            }
+
             if(!getUserId()) {
             window.location.href = '/login';
             };
@@ -46,7 +55,7 @@
 
 <footer style="overflow-x: auto;flex-shrink: 0">
     <div style="display: flex; gap: 8px; align-items: center;justify-content: safe flex-end;">
-        <p style="white-space: nowrap">v1.4</p>
+        <p style="white-space: nowrap">v1.9</p>
         <p>///</p>
         <p x-text="theme" style="padding-inline: 0; white-space: nowrap"></p>
         <p>///</p>
@@ -65,25 +74,37 @@
 
 <div id="contextmenu">
     <div class="dotted-background list" role="list">
-        <p style="padding: 2px 4px 0 4px">Copying is disabled</p>
+        <p style="padding: 2px 4px 0 4px">copying is disabled</p>
         <hr>
         <div role="listitem"><a href="/">Home</a></div>
         <div role="listitem"><a href="/leaderboard">Leaderboard</a></div>
         <hr>
+        <div role="listitem">
+            <p @click="
+            crt = !crt;
+            localStorage.setItem('crt', crt);
+            if(crt) {
+                document.body.classList.add('crt-enabled');
+            } else {
+                document.body.classList.remove('crt-enabled');
+            }" x-text="crt ? 'disable crt' : 'enable crt'"></p>
+        </div>
         <div role="listitem" class="expandable">
-            <p>Theme</p>
+            <p>theme</p>
             <div role="list" class="dotted-background">
-                <template x-for="availableTheme in availableThemes" :key="availableTheme">
-                    <button
-                            @click="
+                <div class="list">
+                    <template x-for="availableTheme in availableThemes" :key="availableTheme">
+                        <button
+                                @click="
                             theme = availableTheme;
                             localStorage.setItem('theme', availableTheme);
                             document.documentElement.setAttribute('data-theme', availableTheme);
                         "
-                            x-text="availableTheme"
-                            style="width: 100%;text-align: left;white-space: nowrap"
-                    ></button>
-                </template>
+                                x-text="availableTheme"
+                                style="width: 100%;text-align: left;white-space: nowrap"
+                        ></button>
+                    </template>
+                </div>
             </div>
         </div>
         <hr>
