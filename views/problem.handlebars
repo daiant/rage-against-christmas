@@ -34,7 +34,7 @@
                                     <li>
                                         <button x-text="'Submission ' + submission.id" @click="open = true"
                                                 @click.outside="open = false"></button>
-                                        <span :class="submission.status" x-text="submission.status"></span>
+                                        <span class="status" :class="submission.status" x-text="submission.status"></span>
                                     </li>
                                     <template x-if="open">
                                         <table style="margin-block: 8px" class="table-with-border">
@@ -66,7 +66,7 @@
                                     <li>
                                         <button x-text="'Test Case ' + (index + 1)" @click="open = true"
                                                 @click.outside="open = false"></button>
-                                        <span :class="result.status" x-text="result.status"></span>
+                                        <span class="status" :class="result.status" x-text="result.status"></span>
                                     </li>
                                     <template x-if="open">
                                         <table style="margin-block: 8px" class="table-with-border">
@@ -110,7 +110,7 @@
                         <ul>
                             <li>
                                 <span>Status</span>
-                                <span :class="result.status" x-text="result.status"></span>
+                                <span class="status" :class="result.status" x-text="result.status"></span>
                             </li>
                             <li>
                                 <span>Execution time</span>
@@ -134,6 +134,7 @@
                                     <tr>
                                         <td><span x-text="index + 1"></span></td>
                                         <td><span x-text="test.status ? 'correct' : 'incorrect'"
+                                                  class="status"
                                                   :class="test.status ? 'correct' : 'incorrect'"></span></td>
                                         <td><span x-text="test.input"></span></td>
                                         <td><span x-text="truncate(test.desiredOutput)"></span></td>
