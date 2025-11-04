@@ -87,7 +87,7 @@
         <input type="password" id="password" autocomplete="current-password" @keydown.enter="login" x-model="password"
                required/>
     </div>
-    <p x-show="invalidPassword" x-text="`Failed username for ${username} from ${ip} port 80`">
+    <p x-show="invalidPassword" x-text="`Failed credentials from ${ip} port 80`">
 
     </p>
     <!--        <button type="button" @click="login" style="padding: 4px 8px;" x-show="password">-->
