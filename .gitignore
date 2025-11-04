@@ -3,8 +3,6 @@
 db_data/
 .env
 
-package-lock.json
-
 # Logs
 logs
 *.log
