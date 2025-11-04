@@ -1,12 +1,26 @@
 services:
+  db:
+    image: "postgres:18.0-alpine"
+    container_name: rage-postgres
+    restart: always
+    shm_size: '128mb'
+    environment:
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      POSTGRES_DB: ${PGDATABASE}
+    volumes:
+      - "./db_data:/var/lib/postgresql/"
+    ports:
+      - "5432:5432"
+
   server:
     image: "node:24.11.0-slim"
     build: .
-    container_name: "server"
+    container_name: "rage-server"
+    working_dir: /app
+    restart: unless-stopped
     ports:
       - "3000:3000"
-    volumes:
-      - "./database.db:/app/database.db"
     develop:
       watch:
         - action: sync
@@ -16,3 +30,12 @@ services:
             - node_modules/
         - action: rebuild
           path: package.json
+    environment:
+      PGUSER: ${PGUSER}
+      PGPASSWORD: ${PGPASSWORD}
+      PGHOST: ${PGHOST}
+      PGPORT: ${PGPORT}
+      PGDATABASE: ${PGDATABASE}
+    command: sh -c "node --watch server.js"
+    volumes:
+      - ./:/app

@@ -74,6 +74,10 @@ ul {
   }
 }
 
+li span {
+  background-color: var(--background);
+}
+
 .status {
   width: fit-content;
   white-space: nowrap;

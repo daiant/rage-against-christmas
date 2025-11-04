@@ -132,7 +132,7 @@ a {
 }
 
 button {
-  background-color: unset;
+  background-color: var(--background);
   color: var(--foreground);
   border: none;
   font-family: unset;

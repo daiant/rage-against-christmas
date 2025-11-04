@@ -1,5 +1,9 @@
 
 /lib/db/database.db
+db_data/
+.env
+
+package-lock.json
 
 # Logs
 logs

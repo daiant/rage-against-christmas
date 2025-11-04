@@ -7,4 +7,4 @@ COPY . /app/
 
 RUN npm ci --only=production
 
-CMD ["node", "--watch", "server.js"]
+# CMD ["node", "--watch", "server.js"]

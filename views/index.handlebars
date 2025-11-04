@@ -28,7 +28,7 @@
         .then(res => res.ok ? res.json() : false).then(d => hasAnsweredCorrectly = Boolean(d));"
             >
           <span>
-              {{concat this.id '. '}}
+              {{concat @index '. '}}
           </span>
                 <span style="display: inline-flex; align-items: center; gap: 4px; flex: 1">
             <span style="flex-grow: 1;margin-inline-end: 8px">{{this.title}}</span>
