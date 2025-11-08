@@ -32,9 +32,9 @@
                             <template x-for="submission of data.submissions" :key="submission.id">
                                 <div x-data="{open: false}">
                                     <li>
-                                        <button x-text="'Submission ' + submission.id" @click="open = true"
+                                        <button x-text="'Intento ' + submission.id" @click="open = true"
                                                 @click.outside="open = false"></button>
-                                        <span class="status" :class="submission.status" x-text="submission.status"></span>
+                                        <span class="status" :class="submission.status" x-text="submission.status === 'correct' ? 'correcto' : 'incorrecto' "></span>
                                     </li>
                                     <template x-if="open">
                                         <table style="margin-block: 8px" class="table-with-border">
@@ -58,14 +58,14 @@
                 </template>
                 <template x-if="testCodeResults?.length">
                     <div class="code-results">
-                        <p>Test code results</p>
+                        <p>Resultados de los tests</p>
                         <ul>
                             <template x-for="(result, index) in testCodeResults" :key="index">
                                 <div x-data="{open: false}">
                                     <li>
                                         <button x-text="'Test ' + (index + 1)" @click="open = true"
                                                 @click.outside="open = false"></button>
-                                        <span class="status" :class="result.status" x-text="result.status"></span>
+                                        <span class="status" :class="result.status" x-text="result.status === 'correct' ? 'correcto' : 'incorrecto'"></span>
                                     </li>
                                     <template x-if="open">
                                         <div>
