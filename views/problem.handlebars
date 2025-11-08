@@ -69,20 +69,23 @@
                                         <span class="status" :class="result.status" x-text="result.status"></span>
                                     </li>
                                     <template x-if="open">
-                                        <table style="margin-block: 8px" class="table-with-border">
-                                            <tr>
-                                                <td style="padding-inline-end: 8px">Input</td>
-                                                <td ><span x-text="truncate(result.input)"></span></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding-inline-end: 8px">Desired output</td>
-                                                <td x-text="truncate(result.desiredOutput)"></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding-inline-end: 8px">Received</td>
-                                                <td x-text="truncate(result.output)"></td>
-                                            </tr>
-                                        </table>
+                                        <div>
+                                            <table style="margin-block: 8px" class="table-with-border">
+                                                <tr>
+                                                    <td style="padding-inline-end: 8px">Input</td>
+                                                    <td ><span x-text="truncate(result.input)"></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding-inline-end: 8px">Desired output</td>
+                                                    <td><span x-text="truncate(result.desiredOutput)"></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding-inline-end: 8px">Received</td>
+                                                    <td x-text="truncate(result.output)"></td>
+                                                </tr>
+                                            </table>
+                                            <i>Tip: consulta en la consola los datos completos si se muestran del todo aquí.</i>
+                                        </div>
                                     </template>
                                 </div>
                             </template>
