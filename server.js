@@ -166,7 +166,7 @@ apiRouter.post('/login', (req, res) => {
     const hasPassword = await comparePassword(password, user.password);
 
     if (!hasPassword) {
-      res.status(401).send({ error: 'Invalid credentials' });
+      res.status(401).send({ error: 'Invalid password' });
       return;
     }
 
