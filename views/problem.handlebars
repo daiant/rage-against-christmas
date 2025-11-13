@@ -93,11 +93,7 @@
                             <p>El código es incorrecto, yo no lo enviaría.</p>
                         </template>
                         <template x-if="testCodeResults.every(r => r.status === 'correct')">
-                            <p>El código ha pasado las pruebas.
-                                <button style="display: inline;" class="primary"
-                                        @click="submitProblem(submittedCodeResult)">enviar
-                                </button>
-                                .
+                            <p>El código ha pasado las pruebas. Ya lo puedes enviar.
                             </p>
                         </template>
                     </div>
